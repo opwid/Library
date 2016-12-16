@@ -15,3 +15,11 @@ We'll reserve the term packet switch to mean a general packet-switching device t
 
 <h3>&nbsp;&nbsp;&nbsp;&nbsp;Connection Setup</h3>
 We just said that the network layer has two important functions, forwarding and routing. But we'll soon see that in some computer networks there is actually a third important network-layer function, namely, connection setup. Recall from our study of TCP that a three-way handshake is required before data can flow from sender to receiver. This allows the sender and receiver to set up the needed state information (for example, sequence number and initial flow-control window size). In an analogous manner, some network-layer architectures -for example, ATM, frame relay, and MPL- require the routers along the chosen path from source to destination to handshake with each other in order to set up state before network-layer data packets within a given source-to-destination connection can begin to flow. In the network layer, this process is referred to as connection setup.
+
+## Network Service Model
+The network service model defines the characteristics of end-to-end transport of packets between sending and receiving end systems. The Internet's network layer provides a single service, known as best-effort service. From Table 4.1, it might appear that best-effort service is a euphemism for no service at all.  
+
+![4_1](https://github.com/opwid/Library/blob/master/Computer-Networking-A-Top-Down-Approach/Images/4_1.png) 
+
+
+
