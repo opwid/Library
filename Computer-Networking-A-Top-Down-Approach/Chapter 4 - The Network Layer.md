@@ -58,11 +58,9 @@ In a datagram network, each time an end system wants to send a packet, it stamps
 As a packet is transmitted from source to destination, it passes through a series of routers. Each of these routers uses the packet's destination address to forward the packet.  Specifically, each router has a forwarding table that maps destination addresses to link interfaces; when a packet arrives at the router, the router uses the packet's destination address to look up the appropriate output link interface in the forwarding table. The router then intentionally forwards the packet to that output link interface.  
 
 To get some further insight into the lookup operation, let's look at a specific example. Suppose that all destination addresses are 32 bits (which just happens to be the length of the destination address in an IP datagram). A brute-force implementation of the forwarding table would have one entry for every possible destination address. Since there are more than 4 billion possible addresses, this option is totally out of the question.  
-Now let's further suppose that our router has four links, numbered 0 through 3, and that packets are to be forwarded to the link interfaces as follows:
+Now let's further suppose that our router has four links, numbered 0 through 3, and that packets are to be forwarded to the link interfaces as follows:  
 
-__Destination Address Range__
-11001000 00010111 00010000 00000000
-
+![4_5_1](https://github.com/opwid/Library/blob/master/Computer-Networking-A-Top-Down-Approach/Images/4_5_1.png)  
 
 
 
