@@ -50,7 +50,7 @@ There are three identifiable phases in a virtual circuit:
 * VC Teardown: This is initiated when the sender (or receiver) informs the network layer of its desire to terminate the VC. The network layer will then typically inform the end system on the other side of the network of the call termination and update the forwarding tables in each of the packet routers on the path to indicate that the VC no longer exists.
 
 In a VC network layer, routers along the path between the two end systems are involved in VC setup, and each router is fully aware of all the VCs passing through it.  
-The messages that the end systems send into the network are known as __signaling messages__, and the protocols used to exchange these messages are often referred to as signaling protocols.
+The messages that the end systems send into the network are known as __signaling messages__, and the protocols used to exchange these messages are often referred to as __signaling protocols__.
 
 ## Datagram Networks
 In a datagram network, each time an end system wants to send a packet, it stamps the packet with the address of the destination end system and then pops the packet into the network.  
@@ -62,8 +62,21 @@ Now let's further suppose that our router has four links, numbered 0 through 3, 
 
 ![4_5_1](https://github.com/opwid/Library/blob/master/Computer-Networking-A-Top-Down-Approach/Images/4_5_1.png)  
 
+Clearly, for this example, it is not necessary to have 4 billion entries in the router's forwarding table. We could, for example, have the following forwarding table with just four entries:  
 
+![4_5_2](https://github.com/opwid/Library/blob/master/Computer-Networking-A-Top-Down-Approach/Images/4_5_2.png)  
 
+With this style of forwarding table, the router matches a prefix of the packet's destination address with the entries in the table; if there's a match, the router forwards the packet to a link associated with the match. When there are multiple matches, the router uses the longest prefix matching rule; that is, it finds the longest matching entry in the table and forwards the packet to the link interface associated with the longest prefix match.  
+
+The time scale at which this forwarding state information changes is relatively slow. Indeed, in a datagram network the forwarding tables are modified by the routing algorithms, which typically update a forwarding table every one-to-five minutes or so. Because forwarding tables in datagram networks can be modified at any time, a series of packets sent from one end system to another may follow different paths through the network and may arrive out of order.
+
+# What's Inside a Router?
+Four router components can be identified:
+
+* _Input ports_: An input port performs several key functions. It performs the physical layer function of terminating an incoming physical link at a router; this is shown in the leftmost box of the input port and the rightmost box of the output port. An input port also performs link-layer functions needed to interoperate with the link layer at the other side of the incoming link; this is represented by the middle boxes in the input and output ports. Perhaps most crucially, the lookup function is also performed at the input port; this will occur in the rightmost box of the input port. It is here that the forwarding table is consulted to determine the router output port to which an arriving packet will be forwarded via the switching fabric. Control packets (for example, packets carrying routing protocol information) are forwarded from an input port to the routing processor.
+* _Switching fabric_: The switching fabric connects the router's input ports to its output ports. This switching fabric is completely contained within the router -a network inside of a network router!
+* _Output ports_: An output port stores packets received from the switching fabric and transmits these packets on the outgoing link by performing the necessary link-layer and physical-layer functions. When a link is bidirectional, an output port will typically be paired with the input port for that link on the same line card (a printed circuit board containing one or more input ports, which is connected to the switching fabric).
+* _Routing processor_: The routing processor executes the routing protocols, maintains routing tables and attached link state information, and computes the forwarding table for the router. It also performs the network management functions that we'll study in Chapter 9.
 
 
 
