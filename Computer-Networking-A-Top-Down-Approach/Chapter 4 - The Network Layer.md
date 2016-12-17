@@ -21,5 +21,15 @@ The network service model defines the characteristics of end-to-end transport of
 
 ![4_1](https://github.com/opwid/Library/blob/master/Computer-Networking-A-Top-Down-Approach/Images/4_1.png) 
 
+Other network architectures have defined and implemented service models that go beyond the Internet's best-effort service. For example, the ATM network architecture provides for multiple service models, meaning that different connections can be provided with different classes of service within the same network.
+
+# Virtual Circuit and Datagram Networks
+A network layer can provide connectionless service or connection service between two hosts. Network-layer connection and connectionless services in many ways parallel transport-layer connection-oriented and connectionless services. For example, a network-layer connection service begins with handshaking between the source and destination hosts; and a network-layer connectionless service does not have any handshaking preliminaries.  
+
+Although the network-layer connection and connectionless services have some parallels with transport-layer connection-oriented and connectionless services, there are crucial differences:
+
+* In the network layer, these services are host-to-host services provided by the network layer for the transport layer. In the transport layer these services are process-to-process services provided by the transport layer for the application layer.
+* In all major computer network architectures to date (Internet, ATM, frame relay, and so on), the network layer provides either a host-to-host connectionless service or a host-to-host connection service, but not both. Computer networks that provide only a connection service at the network layer are called __virtual-circuit (VC) networks__; computer networks that provide only a connectionless service at the network layer are called __datagram networks__.
+* The implementations of connection-oriented service in the transport layer and the connection service in the network layer are fundamentally different. We'll see shortly that the network-layer connection service is implemented in the routers in the network core as well as in the end systems. 
 
 
