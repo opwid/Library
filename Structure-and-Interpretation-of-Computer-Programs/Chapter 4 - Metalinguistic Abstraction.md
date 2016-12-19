@@ -471,11 +471,50 @@ ok
 
 We can regard the evaluator as a very special machine that takes as input a description of a machine. Given this input, the evaluator configures itself to emulate the machine described. For example, if we feed our evaluator the definition of factorial the evaluator will be able to compute factorials. From this perspective, our evaluator is seen to be a universal machine. It mimics other machines when these are described as Lisp programs. This is striking.  
 
-Another striking aspect of the evaluator is that it acts as a bridge between the data objects that are manipulated by our programming language and the programming language itself. Imagine that the evaluator program (implemented in Lisp) is running, and that a user is typing expressions to the evaluator and observing the results. From the perspective of the user, an input expression such as (\* x x) is an expression in the programming language, which the evaluator should execute. From the perspective of the evaluator, however, the expression is simply a list (in this case, a list of three symbols: * , x , and x ) that is to be manipulated according to a well-defined set of rules.
+Another striking aspect of the evaluator is that it acts as a bridge between the data objects that are manipulated by our programming language and the programming language itself. Imagine that the evaluator program (implemented in Lisp) is running, and that a user is typing expressions to the evaluator and observing the results. From the perspective of the user, an input expression such as (\* x x) is an expression in the programming language, which the evaluator should execute. From the perspective of the evaluator, however, the expression is simply a list (in this case, a list of three symbols: * , x , and x ) that is to be manipulated according to a well-defined set of rules.  
 
+That the user's programs are the evaluator's data need not be a source of confusion. In fact, it is sometimes convenient to ignore this distinction, and to give the user the ability to explicitly evaluate a data object as a Lisp expression, by making eval available for use in programs. Many Lisp dialects provide a primitive eval procedure that takes as arguments an expression and an environment and evaluates the expression relative to the environment. Thus,
+```Scheme
+(eval '(* 5 5) user-initial-environment)
+```
+and
+```Scheme
+(eval (cons '* (list 5 5)) user-initial-environment)
+```
+will both return 25.
 
+## Internal Definitions
+Our environment model of evaluation and our metacircular evaluator execute definitions in sequence, extending the environment frame one definition at a time. This is particularly convenient for interactive program development, in which the programmer needs to freely mix the application of procedures with the definition of new procedures. However, if we think carefully about the internal definitions used to implement block structure, we will find that name-by-name extension of the environment may not be the best way to define local variables.  
 
+Consider a procedure with internal definitions, such as
+```Scheme
+(define (f x)
+  (define (even? n) (if (= n 0) true (odd? (- n 1))))
+  (define (odd? n) (if (= n 0) false (even? (- n 1))))
+  <rest of body of f> )
+```
 
+Our intention here is that the name odd? in the body of the procedure even? should refer to the procedure odd? that is defined after even?. The scope of the name odd? is the entire body of f, not just the portion of the body of f starting at the point where the define for odd? occurs. Indeed, when we consider that odd? is itself defined in terms of even? -so that even? and odd? are mutually recursive procedures- we see that the only satisfactory interpretation of the two define s is to regard them as if the names even? and odd? were being added to the environment simultaneously. More generally, in block structure, the scope of a local name is the entire procedure body in which the define is evaluated.  
+
+As it happens, our interpreter will evaluate calls to f correctly, but for an "accidental" reason: Since the definitions of the internal procedures come first, no calls to these procedures will be evaluated until all of them have been defined. Hence, odd? will have been defined by the time even? is executed. In fact, our sequential evaluation mechanism will give the same result as a mechanism that directly implements simultaneous definition for any procedure in which the internal definitions come first in a body and evaluation of the value expressions for the defined variables doesn't actually use any of the defined variables.  
+
+There is, however, a simple way to treat definitions so that internally defined names have truly simultaneous scope -just create all local variables that will be in the current environment before evaluating any of the value expressions. One way to do this is by a syntax transformation on lambda expressions. Before evaluating the body of a lambda expression, we "scan out" and eliminate all the internal definitions in the body. The internally defined variables will be created with a let and then set to their values by assignment. For example, the procedure
+```Scheme
+(lamda <vars>
+       (define u <e1>)
+       (define v <e2>)
+       <e3>)
+```
+would be transformed into
+```Scheme
+(lambda <vars>
+  (let ((u '*unassigned*)
+        (v '*unassigned*))
+    (set! u <e1>)
+    (set! v <e2>)
+    <e3>))
+```
+where \*unassigned\* is a special symbol that causes looking up a variable to signal an error if an attempt is made to use the value of the not-yet-assigned variable.
 
 
 
