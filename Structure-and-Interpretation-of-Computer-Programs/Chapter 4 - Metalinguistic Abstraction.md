@@ -133,12 +133,12 @@ The evaluator program operate on symbolic expressions. The result of operating o
 Here is the specification of the syntax of our language:
 
 * The only self-evaluating items are numbers and strings:
-  ```Scheme
-  (define (self-evaluating? exp)
+```Scheme
+(define (self-evaluating? exp)
   (cond ((number? exp) true)
         ((string? exp) true)
         (else false)))
-  ```
+```
 
 
 
