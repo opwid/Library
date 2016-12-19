@@ -22,7 +22,7 @@ Eval takes as arguments an expression and an environment. It classifies the expr
 
 __Primitive expressions__  
 
-* For self-evaluating expressions, such as numbers, eval returnsthe expression itself.
+* For self-evaluating expressions, such as numbers, eval returns the expression itself.
 * Eval must look up variables in the environment to find their values.
 
 __Special forms__  
