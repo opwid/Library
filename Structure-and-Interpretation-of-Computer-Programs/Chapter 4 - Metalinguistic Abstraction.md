@@ -635,12 +635,208 @@ To analyze an application, we analyze the operator and operands and construct an
 ```
 Our new evaluator uses the same data structures, syntax procedures, and run-time support procedures as in sections Section 4.1.2, Section 4.1.3, and Section 4.1.4.
 
+# Variations on a Scheme — Lazy Evaluation
 
+Now that we have an evaluator expressed as a Lisp program, we can experiment with alternative choices in language design simply by modifying the evaluator. Indeed, new languages are often invented by first writing an evaluator that embeds the new language within an existing high-level language.
 
+## Normal Order and Applicative Order
 
+We noted that Scheme is an applicative-order language, namely, that all the arguments to Scheme procedures are evaluated when the procedure is applied. In contrast, normal-order languages delay evaluation of procedure arguments until the actual argument values are needed. Delaying evaluation of procedure arguments until the last possible moment (e.g., until they are required by a primitive operation) is called _lazy evaluation_.  
 
+Consider the procedure
+```Scheme
+(define (try a b) (if (= a 0) 1 b))
+```
+Evaluating (try 0 (/ 1 0)) generates an error in Scheme. With lazy evaluation, there would be no error. Evaluating the expression would return 1, because the argument (/ 1 0) would never be evaluated. An advantage of lazy evaluation is that some procedures can do useful computation even if evaluation of some of their arguments would produce errors or would not terminate.  
 
+If the body of a procedure is entered before an argument has been evaluated we say that the procedure is _non-strict_ in that argument. If the argument is evaluated before the body of the procedure is entered we say that the procedure is _strict_ in that argument. In a purely applicative-order language, all procedures are strict in each argument. In a purely normal-order language, all compound procedures are non-strict in each argument, and primitive procedures may be either strict or non-strict.  
 
+A striking example of a procedure that can usefully be made non-strict is cons (or, in general, almost any constructor for data structures). One can do useful computation, combining elements to form data structures and operating on the resulting data structures, even if the values of the elements are not known. It makes perfect sense, for instance, to compute the length of a list without knowing the values of the individual elements in the list.
+
+## An Interpreter with Lazy Evaluation
+
+In this section we will implement a normal-order language that is the same as Scheme except that compound procedures are non-strict in each argument. Primitive procedures will still be strict. It is not difficult to modify the evaluator of The Core of the Evaluator so that the language it interprets behaves this way. Almost all the required changes center around procedure application.  
+
+The basic idea is that, when applying a procedure, the interpreter must determine which arguments are to be evaluated and which are to be delayed. The delayed arguments are not evaluated; instead, they are transformed into objects called _thunks_. The thunk must contain the information required to produce the value of the argument when it is needed, as if it had been evaluated at the time of the application. Thus, the thunk must contain the argument expression and the environment in which the procedure application is being evaluated.  
+
+The process of evaluating the expression in a thunk is called _forcing_. In general, a thunk will be forced only when its value is needed: when it is passed to a primitive procedure that will use the value of the thunk; when it is the value of a predicate of a conditional; and when it is the value of an operator that is about to be applied as a procedure. One design choice we have available is whether or not to _memoize_ thunks, as we did with delayed objects in Streams Are Delayed Lists. With memoization, the first time a thunk is forced, it stores the value that is computed. Subsequent forcings simply return the stored value without repeating the computation. We'll make our interpreter memoize, because this is more efficient for many applications. There are tricky considerations here, however.
+
+<h3>&nbsp;&nbsp;&nbsp;&nbsp;Modifying the evaluator</h3>
+The main difference between the lazy evaluator and the one in The Metacircular Evaluator is in the handling of procedure applications in eval and apply.  
+The application? clause of eval becomes
+```Scheme
+((application? exp)
+ (apply (actual-value (operator exp) env)
+        (operands exp)
+        env))
+```
+This is almost the same as the application? clause of eval in The Core of the Evaluator. For lazy evaluation, however, we call apply with the operand expressions, rather than the arguments produced by evaluating them. Since we will need the environment to construct thunks if the arguments are to be delayed, we must pass this as well. We still evaluate the operator, because apply needs the actual procedure to be applied in order to dispatch on its type (primitive versus compound) and apply it.  
+
+Whenever we need the actual value of an expression, we use
+```Scheme
+(define (actual-value exp env)
+  (force-it (eval exp env)))
+```
+instead of just eval, so that if the expression's value is a thunk, it will be forced.  
+
+Our new version of apply is also almost the same. The difference is that eval has passed in unevaluated operand expressions: For primitive procedures (which are strict), we evaluate all the arguments before applying the primitive; for compound procedures (which are non-strict) we delay all the arguments before applying the procedure.
+```Scheme
+(define (apply procedure arguments env)
+  (cond ((primitive-procedure? procedure)
+         (apply-primitive-procedure
+          procedure
+          (list-of-arg-values arguments env))); changed
+        ((compound-procedure? procedure)
+         (eval-sequence
+          (procedure-body procedure)
+          (extend-environment
+           (procedure-parameters procedure)
+           (list-of-delayed-args arguments env); changed
+           (procedure-environment procedure))))
+        (else (error "Unknown procedure type: APPLY"
+                     procedure))))
+```
+The procedures that process the arguments are just like list-of-values from The Core of the Evaluator, except that list-of-delayed-args delays the arguments instead of evaluating them, and list-of-arg-values uses actual value instead of eval:
+```Scheme
+(define (list-of-arg-values exps env)
+  (if (no-operands? exps)
+      '()
+      (cons (actual-value (first-operand exps)
+                          env)
+            (list-of-arg-values (rest-operands exps)
+                                env))))
+(define (list-of-delayed-args exps env)
+  (if (no-operands? exps)
+      '()
+      (cons (delay-it (first-operand exps)
+                      env)
+            (list-of-delayed-args (rest-operands exps)
+                                  env))))
+```
+The other place we must change the evaluator is in the handling of if, where we must use actual-value instead of eval to get the value of the predicate expression before testing whether it is true or false:
+```Scheme
+(define (eval-if exp env)
+  (if (true? (actual-value (if-predicate exp) env))
+      (eval (if-consequent exp) env)
+      (eval (if-alternative exp) env))
+```
+Finally, we must change the driver-loop procedure to use actual-value instead of eval, so that if a delayed value is propagated back to the read-eval-print loop, it will be forced before being printed. We also change the prompts to indicate that this is the lazy evaluator:
+```Scheme
+(define input-prompt ";;; L-Eval input:")
+(define output-prompt ";;; L-Eval value:")
+(define (driver-loop)
+  (prompt-for-input input-prompt)
+  (let ((input (read)))
+    (let ((output
+           (actual-value
+            input the-global-environment)))
+      (announce-output output-prompt)
+      (user-print output)))
+  (driver-loop)))
+```
+With these changes made, we can start the evaluator and test it. The successful evaluation of the try expression discussed in Normal Order and Applicative Order indicates that the interpreter is performing lazy evaluation:
+```Scheme
+(define the-global-environment (setup-environment))
+(driver-loop)
+;;; L-Eval input:
+(define (try a b) (if (= a 0) 1 b))
+;;; L-Eval value:
+ok
+;;; L-Eval input:
+(try 0 (/ 1 0))
+;;; L-Eval value:
+1
+```
+<h3>&nbsp;&nbsp;&nbsp;&nbsp;Representing thunks</h3>
+Our evaluator must arrange to create thunks when procedures are applied to arguments and to force these thunks later. A thunk must package an expression together with the environment, so that the argument can be produced later. To force the thunk, we simply extract the expression and environment from the thunk and evaluate the expression in the environment. We use actual-value rather than eval so that in case the value of the expression is itself a thunk, we will force that, and so on, until we reach something that is not a thunk:
+```Scheme
+(define (force-it obj)
+  (if (thunk? obj)
+      (actual-value (thunk-exp obj) (thunk-env obj))
+      obj))
+```
+One easy way to package an expression with an environment is to make a list containing the expression and the environment. Thus, we create a thunk as follows:
+```Scheme
+(define (delay-it exp env)
+  (list 'thunk exp env))
+(define (thunk? obj)
+  (tagged-list? obj 'thunk))
+(define (thunk-exp thunk) (cadr thunk))
+(define (thunk-env thunk) (caddr thunk))
+```
+Actually, what we want for our interpreter is not quite this, but rather thunks that have been memoized. When a thunk is forced, we will turn it into an evaluated thunk by replacing the stored expression with its value and changing the thunk tag so that it can be recognized as already evaluated.
+```Scheme
+(define (evaluated-thunk? obj)
+  (tagged-list? obj 'evaluated-thunk))
+(define (thunk-value evaluated-thunk)
+  (cadr evaluated-thunk))
+(define (force-it obj)
+  (cond ((thunk? obj)
+         (let ((result (actual-value (thunk-exp obj)
+                                     (thunk-env obj))))
+           (set-car! obj 'evaluated-thunk)
+           (set-car! (cdr obj)
+                     result); replace exp with its value
+           (set-cdr! (cdr obj)
+                     '()); forget unneeded env
+           result))
+        ((evaluated-thunk? obj) (thunk-value obj))
+        (else obj)))
+```
+Notice that the same delay-it procedure works both with and without memoization.
+## Streams as Lazy Lists
+
+In Section 3.5.1, we showed how to implement streams as delayed lists. We introduced special forms delay and cons-stream, which allowed us to construct a "promise" to compute the cdr of a stream, without actually fulfilling that promise until later. We could use this general technique of introducing special forms whenever we need more control over the evaluation process, but this is awkward. For one thing, a special form is not a first-class object like a procedure, so we cannot use it together with higher-order procedures. Additionally, we were forced to create streams as a new kind of data object similar but not identical to lists, and this required us to reimplement many ordinary list operations (map, append, and so on) for use with streams.  
+
+With lazy evaluation, streams and lists can be identical, so there is no need for special forms or for separate list and stream operations. All we need to do is to arrange matters so that cons is non-strict. One way to accomplish this is to extend the lazy evaluator to allow for non-strict primitives, and to implement cons as one of these. An easier way is to recall (Section 2.1.3) that there is no fundamental need to implement cons as a primitive at all. Instead, we can represent pairs as procedures:
+```Scheme
+(define (cons x y) (lambda (m) (m x y)))
+(define (car z) (z (lambda (p q) p)))
+(define (cdr z) (z (lambda (p q) q)))
+```
+In terms of these basic operations, the standard definitions of the list operations will work with infinite lists (streams) as well as finite ones, and the stream operations can be implemented as list operations. Here are some examples:
+```Scheme
+(define (list-ref items n)
+  (if (= n 0)
+      (car items)
+      (list-ref (cdr items) (- n 1))))
+(define (map proc items)
+  (if (null? items)
+      '()
+      (cons (proc (car items)) (map proc (cdr items)))))
+(define (scale-list items factor)
+  (map (lambda (x) (* x factor)) items))
+(define (add-lists list1 list2)
+  (cond ((null? list1) list2)
+        ((null? list2) list1)
+        (else (cons (+ (car list1) (car list2))
+                    (add-lists (cdr list1) (cdr list2))))))
+(define ones (cons 1 ones))
+(define integers (cons 1 (add-lists ones integers)))
+;;; L-Eval input:
+(list-ref integers 17)
+;;; L-Eval value:
+18
+```
+Note that these lazy lists are even lazier than the streams of Chapter 3: The car of the list, as well as the cdr, is delayed. In fact, even accessing the car or cdr of a lazy pair need not force the value of a list element. The value will be forced only when it is really needed—e.g., for use as the argument of a primitive, or to be printed as an answer.  
+
+Lazy pairs also help with the problem that arose with streams in Section 3.5.4, where we found that formulating stream models of systems with loops may require us to sprinkle our programs with explicit delay operations, beyond the ones supplied by cons-stream. With lazy evaluation, all arguments to procedures are delayed uniformly. For instance, we can implement procedures to integrate lists and solve differential equations as we originally intended in Section 3.5.4:
+```Scheme
+(define (integral integrand initial-value dt)
+  (define int
+    (cons initial-value
+          (add-lists (scale-list integrand dt) int)))
+  int)
+(define (solve f y0 dt)
+  (define
+    y (integral dy y0 dt))
+  (define dy (map f y))
+  y)
+;;; L-Eval input:
+(list-ref (solve (lambda (x) x) 1 0.001) 1000)
+;;; L-Eval value:
+2.716924
+```
 
 
 
