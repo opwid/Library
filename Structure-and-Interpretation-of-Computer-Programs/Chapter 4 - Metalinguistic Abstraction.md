@@ -140,9 +140,82 @@ Here is the specification of the syntax of our language:
         (else false)))
 ```
 
+* Variables are represented by symbols:
+```Scheme
+(define (variable? exp) (symbol? exp))
+```
 
+* Qotations have the form (quote \<text-of-quotation>):
+```Scheme
+(define (quoted? exp) (tagged-list? exp 'quote))
+(define (text-of-quotation exp) (cadr exp))
+```
+Quoted? is defined in terms of the procedure tagged-list?, which identifies lists beginning with a designated symbol:
+```Scheme
+(define (tagged-list? exp tag)
+  (if (pair? exp)
+      (eq? (car exp) tag)
+      false))
+```
 
+* Assignments have the form (set! \<var> \<value>):
+```Scheme
+(define (assignment? exp) (tagged-list? exp 'set!))
+(define (assignment-variable exp) (cadr exp))
+(define (assignment-value exp) (caddr exp))
+```
 
+* Definitions have the form
+```Scheme
+(define <var> <value> )
+```
+or the form
+```Scheme
+(define (<var> <parameter1> . . . <parameterN> )
+<body> )
+
+```
+The corresponding syntax procedures are the following:
+```Scheme
+(define (definition? exp) (tagged-list? exp 'define))
+(define (definition-variable exp)
+  (if (symbol? (cadr exp))
+      (cadr exp)
+      (caadr exp)))
+(define (definition-value exp)
+  (if (symbol? (cadr exp))
+      (caddr exp)
+      (make-lambda (cdadr exp); formal parameters
+                   (cddr exp)))); body
+```
+
+* Lambda expressions are lists that begin with the symbol lambda:
+```Scheme
+(define (lambda? exp) (tagged-list? exp 'lambda))
+(define (lambda-parameters exp) (cadr exp))
+(define (lambda-body exp) (cddr exp))
+```
+We also provide a constructor for lambda expressions, which is used by definition-value, above:
+```Scheme
+(define (make-lambda parameters body)
+  (cons 'lambda (cons parameters body)))
+```
+
+* Conditionals begin with if and have a predicate, a consequent, and an (optional) alternative. If the expression has no alternative part, we provide false as the alternative.
+```Scheme
+(define (if? exp) (tagged-list? exp 'if))
+(define (if-predicate exp) (cadr exp))
+(define (if-consequent exp) (caddr exp))
+(define (if-alternative exp)
+  (if (not (null? (cdddr exp)))
+  (cadddr exp)
+  'false))
+```
+We also provide a constructor for if expressions, to be used by cond->if to transform cond expressions into if expressions:
+```Scheme
+(define (make-if predicate consequent alternative)
+  (list 'if predicate consequent alternative))
+```
 
 
 
