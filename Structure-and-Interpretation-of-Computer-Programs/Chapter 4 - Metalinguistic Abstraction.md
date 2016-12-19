@@ -169,7 +169,7 @@ Quoted? is defined in terms of the procedure tagged-list?, which identifies list
 ```Scheme
 (define <var> <value> )
 ```
-    or the form
+  or the form
 ```Scheme
 (define (<var> <parameter1> . . . <parameterN> )
 <body> )
