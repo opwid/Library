@@ -1,5 +1,8 @@
-Metalinguistic abstraction -establishing new languages- plays an important role in all branches of engineering design. It is particularly important to computer programming, because in programming not only can we formulate new languages but we can also implement these languages by constructing evaluators. An evaluator (or interpreter ) for a programming language is a procedure that, when applied to an expression of the language, performs the actions required to evaluate that expression.
+Metalinguistic abstraction -establishing new languages- plays an important role in all branches of engineering design. It is particularly important to computer programming, because in programming not only can we formulate new languages but we can also implement these languages by constructing evaluators. An evaluator (or interpreter ) for a programming language is a procedure that, when applied to an expression of the language, performs the actions required to evaluate that expression. 
+
 > The evaluator, which determines the meaning of expressions in a programming language, is just another program.
+
+
 # The Metacircular Evaluator
 Our evaluator for Lisp will be implemented as a Lisp program. It may seem circular to think about evaluating Lisp programs using an evaluator that is itself implemented in Lisp. However, evaluation is a process, so it is appropriate to describe the evaluation process using Lisp, which, after all, is our tool for describing processes. An evaluator that is written in the same language that it evaluates is said to be _metacircular_.  
 
