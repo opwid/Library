@@ -97,4 +97,66 @@ Eval-if evaluates the predicate part of an if expression in the given environmen
 ```
 The use of true? in eval-if highlights the issue of the connection between an implemented language and an implementation language. The if-predicate is evaluated in the language being implemented and thus yields a value in that language. The interpreter predicate true? translates that value into a value that can be tested by the if in the implementation language: The metacircular representation of truth might not be the same as that of the underlying Scheme.
 
+<h3>&nbsp;&nbsp;&nbsp;&nbsp;Sequences</h3>
+
+Eval-sequence is used by apply to evaluate the sequence of expressions in a procedure body and by eval to evaluate the sequence of expressions in a begin expression. It takes as arguments a sequence of expressions and an environment, and evaluates the expressions in the order in which they occur. The value returned is the value of the final expression.
+```Scheme
+(define (eval-sequence exps env)
+  (cond ((last-exp? exps)
+         (eval (first-exp exps) env))
+        (else
+         (eval (first-exp exps) env)
+         (eval-sequence (rest-exps exps) env))))
+```
+
+<h3>&nbsp;&nbsp;&nbsp;&nbsp;Assignments and definitions</h3>
+The following procedure handles assignments to variables. It calls eval to find the value to be assigned and transmits the variable and the resulting value to set-variable-value! to be installed in the designated environment.
+```Scheme
+(define (eval-assignment exp env)
+  (set-variable-value! (assignment-variable exp)
+                       (eval (assignment-value exp) env)
+                       env)
+  'ok)
+```
+Definitions of variables are handled in a similar manner.
+```Scheme
+(define (eval-definition exp env)
+  (define-variable! (definition-variable exp)
+    (eval (definition-value exp) env)
+    env)
+  'ok)
+```
+
+## Representing Expressions
+
+The evaluator program operate on symbolic expressions. The result of operating on a compound expression is determined by operating recursively on the pieces of the expression and combining the results in a way that depends on the type of the expression. We used data abstraction to decouple the general rules of operation from the details of how expressions are represented. For the evaluator, this means that the syntax of the language being evaluated is determined solely by the procedures that classify and extract pieces of expressions.  
+Here is the specification of the syntax of our language:
+
+* The only self-evaluating items are numbers and strings:
+  ```Scheme
+  (define (self-evaluating? exp)
+  (cond ((number? exp) true)
+        ((string? exp) true)
+        (else false)))
+  ```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
