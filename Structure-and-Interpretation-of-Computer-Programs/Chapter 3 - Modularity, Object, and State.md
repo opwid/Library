@@ -929,31 +929,112 @@ We can thus generate the required stream of pairs as
                 (stream-cdr t))
     (pairs (stream-cdr s) (stream-cdr t)))))
 ```
+<h3>&nbsp;&nbsp;&nbsp;&nbsp;Streams as signals</h3>
+In fact, we can use streams to model signal-processing systems in a very direct way, representing the values of a signal at successive time intervals as consecutive elements of a stream. For instance, we can implement an integrator or summer that, for an input stream x = (x<sub>i</sub>), an initial value C, and a small increment dt, accumulates the sum  
 
+![SIGNAL](https://github.com/opwid/Library/blob/master/Structure-and-Interpretation-of-Computer-Programs/Images/3_signal.png)  
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+and returns the stream of values S = (S<sub>i</sub>). The following integral procedure is reminiscent of the "implicit style" definition of the stream of integers
+```Scheme
+(define (integral integrand initial-value dt)
+  (define int
+    (cons-stream initial-value
+                 (add-streams (scale-stream integrand dt)
+                              int)))
+```
+The input stream is scaled by dt and passed through an adder, whose output is passed back through the same adder. The self-reference in the definition of int is reflected by the feedback loop that connects the output of the adder to one of the inputs.
 
 ## Streams and Delayed Evaluation
+The integral procedure at the end of the preceding section shows how we can use streams to model signal-processing systems that contain feedback loops. The feedback loop for the adder is modeled by the fact that integral's internal stream int is defined in terms of itself:
+```Scheme
+(define int
+  (cons-stream
+   initial-value
+   (add-streams (scale-stream integrand dt)
+                int)))
+```
+
+The interpreter's ability to deal with such an implicit definition depends on the delay that is incorporated into cons-stream. Without this delay, the interpreter could not construct int before evaluating both arguments to cons-stream, which would require that int already be defined. In general, delay is crucial for using streams to model signal-processing systems that contain loops. Without delay, our models would have to be formulated so that the inputs to any signal-processing component would be fully evaluated before the output could be produced. This would outlaw loops.  
+
+Unfortunately, stream models of systems with loops may require uses of delay beyond the "hidden" delay supplied by cons-stream. For instance, Figure 3.34 shows a signal-processing system for solving the differential equation dy/dt = f(y) where f is a given function. The figure shows a mapping component, which applies f to its input signal, linked in a feedback loop to an integrator in a manner very similar to that of the analog computer circuits that are actually used to solve such
+equations.
+
+![3_34](https://github.com/opwid/Library/blob/master/Structure-and-Interpretation-of-Computer-Programs/Images/3_34.png)  
+
+Assuming we are given an initial value y<sub>0</sub> for y, we could try to model this system using the procedure
+```Scheme
+(define (solve f y0 dt)
+  (define y (integral dy y0 dt))
+  (define dy (stream-map f y))
+  y)
+```
+This procedure does not work, because in the first line of solve the call to integral requires that the input dy be defined, which does not happen until the second line of solve.  
+
+On the other hand, the intent of our definition does make sense, because we can, in principle, begin to generate the y stream without knowing dy. Indeed, integral and many other stream operations have properties similar to those of cons-stream, in that we can generate part of the answer given only partial information about the arguments. For integral, the first element of the output stream is the specified initial-value. Thus, we can generate the first element of the output stream without evaluating the integrand dy. Once we know the first element of y, the stream-map in the second line of solve can begin working to generate the first element of dy, which will produce the next element of y, and so on.  
+
+To take advantage of this idea, we will redefine integral to expect the integrand stream to be a delayed argument. Integral will force the integrand to be evaluated only when it is required to generate more than the first element of the output stream:
+```Scheme
+(define (integral delayed-integrand initial-value dt)
+  (define int
+    (cons-stream
+     initial-value
+     (let ((integrand (force delayed-integrand)))
+       (add-streams (scale-stream integrand dt) int))))
+  int)
+```
+Now we can implement our solve procedure by delaying the evaluation of dy in the definition of y:
+```Scheme
+(define (solve f y0 dt)
+  (define y (integral (delay dy) y0 dt))
+  (define dy (stream-map f y))
+  y)
+```
+In general, every caller of integral must now delay the integrand argument. We can demonstrate that the solve procedure works by approximating e ≈ 2.718 by computing the value at y = 1 of the solution to the differential equation dy/dt = y with initial condition y(0) = 1:
+```Scheme
+(stream-ref (solve (lambda (y) y)
+                   1
+                   0.001)
+            1000)
+2.716924
+```
+<h3>&nbsp;&nbsp;&nbsp;&nbsp;Normal-order evaluation</h3>
+The examples in this section illustrate how the explicit use of delay and force provides great programming flexibility, but the same examples also show how this can make our programs more complex. Our new integral procedure, for instance, gives us the power to model systems with loops, but we must now remember that integral should be called with a delayed integrand, and every procedure that uses integral must be aware of this. In effect, we have created two classes of procedures: ordinary procedures and procedures that take delayed arguments. In general, creating separate classes of procedures forces us to create separate classes of higher-order procedures as well.  
+
+One way to avoid the need for two different classes of procedures is to make all procedures take delayed arguments. We could adopt a model of evaluation in which all arguments to procedures are automatically delayed and arguments are forced only when they are actually needed (for example, when they are required by a primitive operation). This would transform our language to use normal-order evaluation, which we first described when we introduced the substitution model for evaluation in Section 1.1.5. Converting to normal-order evaluation provides a uniform and elegant way to simplify the use of delayed evaluation, and this would be a natural strategy to adopt if we were concerned only with stream processing. In Section 4.2, after we have studied the evaluator, we will see how to transform our language in just this way. Unfortunately, including delays in procedure calls wreaks havoc with our ability to design programs that depend on the order of events, such as programs that use assignment, mutate data, or perform input or output. Even the single delay in cons-stream can cause great confusion. As far as anyone knows, mutability and delayed evaluation do not mix well in programming languages, and devising ways to deal with both of these at once is an active area of research.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## Modularity of Functional Programs and Modularity of Objects
