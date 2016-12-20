@@ -806,7 +806,7 @@ This definition says that fibs is a stream beginning with 0 and 1, such that the
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1 1 2 3 5 8 13 21 ... = (stream-cdr fibs)  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 1 1 2 3 5 8  13 ... = fibs  
-0 1 1 2 3
+0 1 1 2 3 5 8 13 21 34 ... = fibs
 
 
 
