@@ -609,22 +609,150 @@ The second program performs the same computation using the sequence operations o
               (filter prime?
                       (enumerate-interval a b))))
 ```
+In carrying out the computation, the first program needs to store only the sum being accumulated. In contrast, the filter in the second program cannot do any testing until enumerate-interval has constructed a complete list of the numbers in the interval. The filter generates another list, which in turn is passed to accumulate before being collapsed to form a sum. Such large intermediate storage is not needed by the first program, which we can think of as enumerating the interval incrementally, adding each prime to the sum as it is generated.  
 
+Streams are a clever idea that allows one to use sequence manipulations without incurring the costs of manipulating sequences as lists. With streams we can achieve the best of both worlds: We can formulate programs elegantly as sequence manipulations, while attaining the efficiency of incremental computation. The basic idea is to arrange to construct a stream only partially, and to pass the partial construction to the program that consumes the stream. If the consumer attempts to access a part of the stream that has not yet been constructed, the stream will automatically construct just enough more of itself to produce the required part, thus preserving the illusion that the entire stream exists. In other words, although we will write programs as if we were processing complete sequences, we design our stream implementation to automatically and transparently interleave the construction of the stream with its use.  
 
+On the surface, streams are just lists with different names for the procedures that manipulate them. There is a constructor, cons-stream, and two selectors, stream-car and stream-cdr. There is a distinguishable object, the-empty-stream, which cannot be the result of any cons-stream operation, and which can be identified with the predicate stream-null?. Thus we can make and use streams, in just the same way as we can make and use lists, to represent aggregate data arranged in a sequence. In particular, we can build stream analogs of the list operations, such as list-ref, map, and for-each:
+```Scheme
+(define (stream-ref s n)
+  (if (= n 0)
+      (stream-car s)
+      (stream-ref (stream-cdr s) (- n 1))))
+(define (stream-map proc s)
+  (if (stream-null? s)
+      the-empty-stream
+      (cons-stream (proc (stream-car s))
+                   (stream-map proc (stream-cdr s)))))
+(define (stream-for-each proc s)
+  (if (stream-null? s)
+      'done
+      (begin (proc (stream-car s))
+             (stream-for-each proc (stream-cdr s)))))
+```
+Stream-for-each is useful for viewing streams:
+```Scheme
+(define (display-stream s)
+  (stream-for-each display-line s))
+(define (display-line x) (newline) (display x))
+```
+To make the stream implementation automatically and transparently interleave the construction of a stream with its use, we will arrange for the cdr of a stream to be evaluated when it is accessed by the stream-cdr procedure rather than when the stream is constructed by cons-stream. As a data abstraction, streams are the same as lists. The difference is the time at which the elements are evaluated. With ordinary lists, both the car and the cdr are evaluated at construction time. With streams, the cdr is evaluated at selection time.  
 
+Our implementation of streams will be based on a special form called _delay_. Evaluating (delay \<exp>) does not evaluate the expression \<exp>, but rather returns a so-called delayed object, which we can think of as a "promise" to evaluate \<exp> at some future time. As a companion to delay, there is a procedure called force that takes a delayed object as argument and performs the evaluation -in effect, forcing the delay to fulfill its promise. We will see below how delay and force can be implemented, but first let us use these to construct streams.  
 
+Cons-stream is a special form defined so that
+```Scheme
+(cons-stream \<a> \<b>)
+```
+is equivalent to 
+```Scheme
+(cons \<a> (delay \<b>))
+```
+What this means is that we will construct streams using pairs. However, rather than placing the value of the rest of the stream into the cdr of the pair we will put there a promise to compute the rest if it is ever requested. Stream-car and stream-cdr can now be defined as procedures: 
+```Scheme
+(define (stream-car stream) (car stream))
+(define (stream-cdr stream) (force (cdr stream)))
+```
+Stream-car selects the car of the pair; stream-cdr selects the cdr of the pair and evaluates the delayed expression found there to obtain the rest of the stream.
+<h3>&nbsp;&nbsp;&nbsp;&nbsp;The stream implementation in action</h3>
 
+To see how this implementation behaves, let us analyze the "outrageous" prime computation we saw above, reformulated in terms of streams:
+```Scheme
+(stream-car
+ (stream-cdr
+  (stream-filter prime?
+                 (stream-enumerate-interval
+                  10000 1000000))))
+```
+We begin by calling stream-enumerate-interval with the arguments 10,000 and 1,000,000. Stream-enumerate-interval is the stream analog of enumerate-interval:
+```Scheme
+(define (stream-enumerate-interval low high)
+  (if (> low high)
+      the-empty-stream
+      (cons-stream
+       low
+       (stream-enumerate-interval (+ low 1) high))))
+```
+and thus the result returned by stream-enumerate-interval, formed by the cons-stream, is:
+```Scheme
+(cons 10000
+  (delay (stream-enumerate-interval 10001 1000000)))
+```
+That is, stream-enumerate-interval returns a stream represented as a pair whose car is 10,000 and whose cdr is a promise to enumerate more of the interval if so requested. This stream is now filtered for primes, using the stream analog of the filter procedure:
+```Scheme
+(define (stream-filter pred stream)
+  (cond ((stream-null? stream) the-empty-stream)
+        ((pred (stream-car stream))
+         (cons-stream (stream-car stream)
+                      (stream-filter
+                       pred
+                       (stream-cdr stream))))
+        (else (stream-filter pred (stream-cdr stream)))))
+```
+Stream-filter tests the stream-car of the stream (the car of the pair, which is 10,000). Since this is not prime, stream-filter examines the stream-cdr of its input stream. The call to stream-cdr forces evaluation of the delayed stream-enumerate-interval, which now returns
+```Scheme
+(cons 10001
+  (delay (stream-enumerate-interval 10002 1000000)))
+```
 
+Stream-filter now looks at the stream-car of this stream, 10,001, sees that this is not prime either, forces another stream-cdr, and so on, until stream-enumerate-interval yields the prime 10,007, whereupon stream-filter, according to its definition, returns
+```Scheme
+(cons-stream (stream-car stream)
+  (stream-filter pred (stream-cdr stream)))
+```
+which in this case is
+```Scheme
+(cons 10007
+      (delay (stream-filter
+              prime?
+              (cons 10008
+                    (delay (stream-enumerate-interval
+                            10009
+                            1000000))))))
+```
+This result is now passed to stream-cdr in our original expression. This forces the delayed stream-filter, which in turn keeps forcing the delayed stream-enumerate-interval until it finds the next prime, which is 10,009. Finally, the result passed to stream-car in our original expression is
+```Scheme
+(cons 10009
+      (delay (stream-filter
+              prime?
+              (cons 10010
+                    (delay (stream-enumerate-interval
+                            10011
+                            1000000))))))
+```
+Stream-car returns 10,009, and the computation is complete. Only as many integers were tested for primality as were necessary to find the second prime, and the interval was enumerated only as far as was necessary to feed the prime filter.  
 
+In general, we can think of delayed evaluation as "demand-driven" programming, whereby each stage in the stream process is activated only enough to satisfy the next stage. What we have done is to decouple the actual order of events in the computation from the apparent structure of our procedures. We write procedures as if the streams existed "all at once" when, in reality, the computation is performed incrementally, as in traditional programming styles.
 
-
-
-
-
-
-
-
-
+<h3>&nbsp;&nbsp;&nbsp;&nbsp;Implementing delay and force</h3>
+Although delay and force may seem like mysterious operations, their implementation is really quite straightforward. Delay must package an expression so that it can be evaluated later on demand, and we can accomplish this simply by treating the expression as the body of a procedure. Delay can be a special form such that
+```Scheme
+(delay <exp>)
+```
+is syntactic sugar for
+```Scheme
+(lambda () <exp>)
+```
+Force simply calls the procedure (of no arguments) produced by delay, so we can implement force as a procedure:
+```Scheme
+(define (force delayed-object) (delayed-object))
+```
+This implementation suffices for delay and force to work as advertised, but there is an important optimization that we can include. In many applications, we end up forcing the same delayed object many times. This can lead to serious inefficiency in recursive programs involving streams. The solution is to build delayed objects so that the first time they are forced, they store the value that is computed. Subsequent forcings will simply return the stored value without repeating the computation. In other words, we implement delay as a special-purpose memoized procedure. One way to accomplish this is to use the following procedure, which takes as argument a procedure (of no arguments) and returns a memoized version of the procedure. The first time the memoized procedure is run, it saves the computed result. On subsequent evaluations, it simply returns the result.
+```Scheme
+(define (memo-proc proc)
+  (let ((already-run? false) (result false))
+    (lambda ()
+      (if (not already-run?)
+          (begin (set! result (proc))
+                 (set! already-run? true)
+                 result)
+          result))))
+```
+Delay is then defined so that (delay \<exp>) is equivalent to
+```Scheme
+(memo-proc (lambda () <exp>))
+```
+and force is as defined previously.
 
 
 
