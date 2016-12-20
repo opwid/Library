@@ -878,12 +878,57 @@ We wish to generate a stream that contains all the pairs in the array that lie o
 
 Call the general stream of pairs (pairs S T), and consider it to be composed of three parts: the pair (S<sub>0</sub>, T<sub>0</sub>), the rest of the pairs in the first row, and the remaining pairs:  
 
-(S<sub>0</sub>, T<sub>0</sub>)|(S<sub>0</sub>, T<sub>1</sub>) (S<sub>0</sub>, T<sub>2</sub>) ...  
-------------------------------------------------------------------------------------------
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(S<sub>1</sub>, T<sub>1</sub>) (S<sub>1</sub>, T<sub>2</sub>) ...  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (S<sub>2</sub>, T<sub>2</sub>) ...  
+![MAP](https://github.com/opwid/Library/blob/master/Structure-and-Interpretation-of-Computer-Programs/Images/3_map.png)  
 
+Observe that the third piece in this decomposition (pairs that are not in the first row) is (recursively) the pairs formed from (stream-cdr S) and (stream-cdr T). Also note that the second piece (the rest of the first row) is
+```Scheme
+(stream-map (lambda (x) (list (stream-car s) x))
+            (stream-cdr t))
+```
+Thus we can form our stream of pairs as follows:
+```Scheme
+(define (pairs s t)
+  (cons-stream
+   (list (stream-car s) (stream-car t))
+   ( <combine-in-some-way>
+     (stream-map (lambda (x) (list (stream-car s) x))
+                 (stream-cdr t))
+     (pairs (stream-cdr s) (stream-cdr t)))))
+```
+In order to complete the procedure, we must choose some way to combine the two inner streams.
+```Scheme
+(define (stream-append s1 s2)
+  (if (stream-null? s1)
+      s2
+      (cons-stream (stream-car s1)
+                   (stream-append (stream-cdr s1) s2))))
+```
 
+This is unsuitable for infinite streams, however, because it takes all the elements from the first stream before incorporating the second stream. In particular, if we try to generate all pairs of positive integers using
+```Scheme
+(pairs integers integers)
+```
+our stream of results will first try to run through all pairs with the first integer equal to 1, and hence will never produce pairs with any other value of the first integer.  
+
+To handle infinite streams, we need to devise an order of combination that ensures that every element will eventually be reached if we let our program run long enough. An elegant way to accomplish this is with the following interleave procedure:
+```Scheme
+(define (interleave s1 s2)
+  (if (stream-null? s1)
+      s2
+      (cons-stream (stream-car s1)
+                   (interleave s2 (stream-cdr s1)))))
+```
+Since interleave takes elements alternately from the two streams, every element of the second stream will eventually find its way into the interleaved stream, even if the first stream is infinite.  
+We can thus generate the required stream of pairs as
+```Scheme
+(define (pairs s t)
+  (cons-stream
+   (list (stream-car s) (stream-car t))
+   (interleave
+    (stream-map (lambda (x) (list (stream-car s) x))
+                (stream-cdr t))
+    (pairs (stream-cdr s) (stream-cdr t)))))
+```
 
 
 
