@@ -578,10 +578,10 @@ Get takes as arguments two keys, and put takes as arguments two keys and a value
 
 
 ## A Simulator for Digital Circuits (Incomplete)
-## Propagation of Constraints
-# Concurrency: Time Is of the Essence
-## The Nature of Time in Concurrent Systems
-## Mechanisms for Controlling Concurrency
+## Propagation of Constraints (Incomplete)
+# Concurrency: Time Is of the Essence (Incomplete)
+## The Nature of Time in Concurrent Systems (Incomplete)
+## Mechanisms for Controlling Concurrency (Incomplete)
 # Streams
 ## Streams Are Delayed Lists
 ## Infinite Streams
