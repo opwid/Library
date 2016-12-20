@@ -806,33 +806,89 @@ This definition says that fibs is a stream beginning with 0 and 1, such that the
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1 1 2 3 5 8 13 21 ... = (stream-cdr fibs)  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 1 1 2 3 5 8  13 ... = fibs  
-0 1 1 2 3 5 8 13 21 34 ... = fibs
+0 1 1 2 3 5 8 13 21 34 ... = fibs  
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Scale-stream is another useful procedure in formulating such stream definitions. This multiplies each item in a stream by a given constant:
+```Scheme
+(define (scale-stream stream factor)
+  (stream-map (lambda (x) (* x factor))
+              stream))
+```
+For example,
+```Scheme
+(define double (cons-stream 1 (scale-stream double 2)))
+```
+produces the stream of powers of 2: 1, 2, 4, 8, 16, 32, ...  
 
 ## Exploiting the Stream Paradigm
+
+Streams with delayed evaluation can be a powerful modeling tool, providing many of the benefits of local state and assignment. Moreover, they avoid some of the theoretical tangles that accompany the introduction of assignment into a programming language.  
+
+The stream approach can be illuminating because it allows us to build systems with different module boundaries than systems organized around assignment to state variables. For example, we can think of an entire time series (or signal) as a focus of interest, rather than the values of the state variables at individual moments. This makes it convenient to combine and compare components of state from different moments.
+
+<h3>&nbsp;&nbsp;&nbsp;&nbsp;Formulating iterations as stream processes</h3>
+
+We know now that we can represent state as a "timeless" stream of values rather than as a set of variables to be updated. Let's adopt this perspective in revisiting the square-root procedure from Example: Square Roots by Newton's Method. Recall that the idea is to generate a sequence of better and better guesses for the square root of x by applying over and over again the procedure that improves guesses:
+```Scheme
+(define (sqrt-improve guess x)
+  (average guess (/ x guess)))
+```
+In our original sqrt procedure, we made these guesses be the successive values of a state variable. Instead we can generate the infinite stream of guesses, starting with an initial guess of 1:
+```Scheme
+(define (sqrt-stream x)
+  (define guesses
+    (cons-stream
+     1.0
+     (stream-map (lambda (guess) (sqrt-improve guess x))
+                 guesses)))
+  guesses)
+
+(display-stream (sqrt-stream 2))
+1.
+1.5
+1.4166666666666665
+1.4142156862745097
+1.4142135623746899
+...
+```
+<h3>&nbsp;&nbsp;&nbsp;&nbsp;Infinite streams of pairs</h3>
+
+In Sequences as Conventional Interfaces, we saw how the sequence paradigm handles traditional nested loops as processes defined on sequences of pairs. If we generalize this technique to infinite streams, then we can write programs that are not easily represented as loops, because the "looping" must range over an infinite set.  
+
+For example, suppose we want to generalize the prime-sum-pairs rocedure to produce the stream of pairs of all integers (i, j) with i <= j such that i + j is prime. If int-pairs is the sequence of all pairs of integers (i, j) with i <= j, then our required stream is simply
+```Scheme
+(stream-filter
+ (lambda (pair) (prime? (+ (car pair) (cadr pair))))
+ int-pairs)
+```
+Our problem, then, is to produce the stream int-pairs. More generally, suppose we have two streams S = (S <sub>i</sub>) and T = (T<sub>j</sub>), and imagine the infinite rectangular array
+(S<sub>0</sub>, T<sub>0</sub>) (S<sub>0</sub>, T<sub>1</sub>) (S<sub>0</sub>, T<sub>2</sub>) ...  
+(S<sub>1</sub>, T<sub>0</sub>) (S<sub>1</sub>, T<sub>1</sub>) (S<sub>1</sub>, T<sub>2</sub>) ...  
+(S<sub>2</sub>, T<sub>0</sub>) (S<sub>2</sub>, T<sub>1</sub>) (S<sub>2</sub>, T<sub>2</sub>) ...  
+...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## Streams and Delayed Evaluation
 ## Modularity of Functional Programs and Modularity of Objects
