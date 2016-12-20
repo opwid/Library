@@ -583,6 +583,54 @@ Get takes as arguments two keys, and put takes as arguments two keys and a value
 ## The Nature of Time in Concurrent Systems (Incomplete)
 ## Mechanisms for Controlling Concurrency (Incomplete)
 # Streams
+
+In this section, we will see how to model change in terms of sequences that represent the time histories of the systems being modeled. To accomplish this, we introduce new data structures called streams. From an abstract point of view, a stream is simply a sequence. However, we will find that the straightforward implementation of streams as lists doesn't fully reveal the power of stream processing. As an alternative, we introduce the technique of delayed evaluation, which enables us to represent very large (even infinite) sequences as streams.  
+
+As we saw in Sequences as Conventional Interfaces, sequences can serve as standard interfaces for combining program modules. We formulated powerful abstractions for manipulating sequences, such as map, filter, and accumulate, that capture a wide variety of operations in a manner that is both succinct and elegant.  
+
+Unfortunately, if we represent sequences as lists, this elegance is bought at the price of severe inefficiency with respect to both the time and space required by our computations. When we represent manipulations on sequences as transformations of lists, our programs must construct and copy data structures (which may be huge) at every step of a process.  
+
+To see why this is true, let us compare two programs for computing the sum of all the prime numbers in an interval. The first program is written in standard iterative style:
+```Scheme
+(define (sum-primes a b)
+  (define (iter count accum)
+    (cond ((> count b) accum)
+          ((prime? count)
+           (iter (+ count 1) (+ count accum)))
+          (else (iter (+ count 1) accum))))
+  (iter a 0))
+```
+
+The second program performs the same computation using the sequence operations of Sequences as Conventional Interfaces:
+```Scheme
+(define (sum-primes a b)
+  (accumulate +
+              0
+              (filter prime?
+                      (enumerate-interval a b))))
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## Streams Are Delayed Lists
 ## Infinite Streams
 ## Exploiting the Stream Paradigm
