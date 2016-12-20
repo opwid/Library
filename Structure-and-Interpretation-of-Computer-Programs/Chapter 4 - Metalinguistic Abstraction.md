@@ -6,7 +6,7 @@ Metalinguistic abstraction -establishing new languages- plays an important role 
 # The Metacircular Evaluator
 Our evaluator for Lisp will be implemented as a Lisp program. It may seem circular to think about evaluating Lisp programs using an evaluator that is itself implemented in Lisp. However, evaluation is a process, so it is appropriate to describe the evaluation process using Lisp, which, after all, is our tool for describing processes. An evaluator that is written in the same language that it evaluates is said to be _metacircular_.  
 
-The metacircular evaluator is essentially a Scheme formulation of the environment model of evaluation described in Section 3.2. Recall that the model has two basic parts:
+The metacircular evaluator is essentially a Scheme formulation of the environment model of evaluation described in The Environment Model of Evaluation. Recall that the model has two basic parts:
 
 * To evaluate a combination (a compound expression other than a special form), evaluate the subexpressions and then apply the value of the operator subexpression to the values of the operand subexpressions.
 * To apply a compound procedure to a set of arguments, evaluate the body of the procedure in a new environment. To construct this environment, extend the environment part of the procedure object by a frame in which the formal parameters of the procedure are bound to the arguments to which the procedure is applied.
@@ -610,7 +610,7 @@ Analysis of a sequence of expressions (as in a begin or the body of a lambda exp
     (if (null? procs) (error "Empty sequence: ANALYZE"))
     (loop (car procs) (cdr procs))))
 ```
-To analyze an application, we analyze the operator and operands and construct an execution procedure that calls the operator execution procedure (to obtain the actual procedure to be applied) and the operand execution procedures (to obtain the actual arguments). We then pass these to execute-application, which is the analog of apply in Section 4.1.1. Execute-application differs from apply in that the procedure body for a compound procedure has already been analyzed, so there is no need to do further analysis. Instead, we just call the execution procedure for the body on the extended environment.
+To analyze an application, we analyze the operator and operands and construct an execution procedure that calls the operator execution procedure (to obtain the actual procedure to be applied) and the operand execution procedures (to obtain the actual arguments). We then pass these to execute-application, which is the analog of apply in The Core of the Evaluator. Execute-application differs from apply in that the procedure body for a compound procedure has already been analyzed, so there is no need to do further analysis. Instead, we just call the execution procedure for the body on the extended environment.
 ```Scheme
 (define (analyze-application exp)
   (let ((fproc (analyze (operator exp)))
@@ -633,7 +633,7 @@ To analyze an application, we analyze the operator and operands and construct an
          (error "Unknown procedure type: EXECUTE-APPLICATION"
                 proc))))
 ```
-Our new evaluator uses the same data structures, syntax procedures, and run-time support procedures as in sections Section 4.1.2, Section 4.1.3, and Section 4.1.4.
+Our new evaluator uses the same data structures, syntax procedures, and run-time support procedures as in sections Representing Expressions, Evaluator Data Structures, and Running the Evaluator as a Program.
 
 # Variations on a Scheme — Lazy Evaluation
 
@@ -786,9 +786,9 @@ Actually, what we want for our interpreter is not quite this, but rather thunks 
 Notice that the same delay-it procedure works both with and without memoization.
 ## Streams as Lazy Lists
 
-In Section 3.5.1, we showed how to implement streams as delayed lists. We introduced special forms delay and cons-stream, which allowed us to construct a "promise" to compute the cdr of a stream, without actually fulfilling that promise until later. We could use this general technique of introducing special forms whenever we need more control over the evaluation process, but this is awkward. For one thing, a special form is not a first-class object like a procedure, so we cannot use it together with higher-order procedures. Additionally, we were forced to create streams as a new kind of data object similar but not identical to lists, and this required us to reimplement many ordinary list operations (map, append, and so on) for use with streams.  
+In Streams Are Delayed Lists, we showed how to implement streams as delayed lists. We introduced special forms delay and cons-stream, which allowed us to construct a "promise" to compute the cdr of a stream, without actually fulfilling that promise until later. We could use this general technique of introducing special forms whenever we need more control over the evaluation process, but this is awkward. For one thing, a special form is not a first-class object like a procedure, so we cannot use it together with higher-order procedures. Additionally, we were forced to create streams as a new kind of data object similar but not identical to lists, and this required us to reimplement many ordinary list operations (map, append, and so on) for use with streams.  
 
-With lazy evaluation, streams and lists can be identical, so there is no need for special forms or for separate list and stream operations. All we need to do is to arrange matters so that cons is non-strict. One way to accomplish this is to extend the lazy evaluator to allow for non-strict primitives, and to implement cons as one of these. An easier way is to recall (Section 2.1.3) that there is no fundamental need to implement cons as a primitive at all. Instead, we can represent pairs as procedures:
+With lazy evaluation, streams and lists can be identical, so there is no need for special forms or for separate list and stream operations. All we need to do is to arrange matters so that cons is non-strict. One way to accomplish this is to extend the lazy evaluator to allow for non-strict primitives, and to implement cons as one of these. An easier way is to recall (What Is Meant by Data?) that there is no fundamental need to implement cons as a primitive at all. Instead, we can represent pairs as procedures:
 ```Scheme
 (define (cons x y) (lambda (m) (m x y)))
 (define (car z) (z (lambda (p q) p)))
@@ -820,7 +820,7 @@ In terms of these basic operations, the standard definitions of the list operati
 ```
 Note that these lazy lists are even lazier than the streams of Chapter 3: The car of the list, as well as the cdr, is delayed. In fact, even accessing the car or cdr of a lazy pair need not force the value of a list element. The value will be forced only when it is really needed—e.g., for use as the argument of a primitive, or to be printed as an answer.  
 
-Lazy pairs also help with the problem that arose with streams in Section 3.5.4, where we found that formulating stream models of systems with loops may require us to sprinkle our programs with explicit delay operations, beyond the ones supplied by cons-stream. With lazy evaluation, all arguments to procedures are delayed uniformly. For instance, we can implement procedures to integrate lists and solve differential equations as we originally intended in Section 3.5.4:
+Lazy pairs also help with the problem that arose with streams in Streams and Delayed Evaluation, where we found that formulating stream models of systems with loops may require us to sprinkle our programs with explicit delay operations, beyond the ones supplied by cons-stream. With lazy evaluation, all arguments to procedures are delayed uniformly. For instance, we can implement procedures to integrate lists and solve differential equations as we originally intended in Streams and Delayed Evaluation:
 ```Scheme
 (define (integral integrand initial-value dt)
   (define int
