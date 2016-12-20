@@ -642,11 +642,11 @@ Our implementation of streams will be based on a special form called _delay_. Ev
 
 Cons-stream is a special form defined so that
 ```Scheme
-(cons-stream \<a> \<b>)
+(cons-stream <a> <b>)
 ```
 is equivalent to 
 ```Scheme
-(cons \<a> (delay \<b>))
+(cons <a> (delay <b>))
 ```
 What this means is that we will construct streams using pairs. However, rather than placing the value of the rest of the stream into the cdr of the pair we will put there a promise to compute the rest if it is ever requested. Stream-car and stream-cdr can now be defined as procedures: 
 ```Scheme
