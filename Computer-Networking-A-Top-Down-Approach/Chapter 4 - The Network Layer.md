@@ -303,12 +303,60 @@ Let's consider the few first steps in detail:
 
 * In the initialization step, the currently known least-cost paths from u to its directly attached neighbors,v, x,and w,are initialized to 2, 1, and 5, respectively. Note in particular that the cost to w is set to 5 (even though we will soon see that a lesser-cost path does indeed exist) since this is the cost of the direct (one hop) link from u to w.The costs to y and z are set to infinity because they are not directly connected to u.
 * In the first iteration, we look among those nodes not yet added to the set N' and find that node with the least cost as of the end of the previous iteration. That node is x, with a cost of 1, and thus x is added to the setN'. Line 12 of the LS algorithm is then performed to update D(v) for all nodes v, yielding the results show n in the second line (Step 1) in Table 4.3. The cost of the path to v is unchanged. The cost of the path to w (which was 5 at the end of the initialization) through node x is found to have a cost of 4. Hence this lower-cost path is selected and w's predecessor along the shortest path from u is set to x. Similarly, the cost to y(throughx) is computed to be 2, and the table is updated accordingly.
-* In the second iteration, nodes v and y are found to have the least-cost paths (2),and we break the tie arbitrarily and add y to the set N' so that N' now contains u,x, and y.The cost to the remaining nodes not yet in N', that is, nodes v, w,and z, are updated via line 12 of the LS algorithm, yielding the results shown in the third row in the Table 4.3.
+* In the second iteration, nodes v and y are found to have the least-cost paths (2),and we break the tie arbitrarily and add y to the set N' so that N' now contains u,x, and y. The cost to the remaining nodes not yet in N', that is, nodes v, w,and z, are updated via line 12 of the LS algorithm, yielding the results shown in the third row in the Table 4.3.
 * And so on..
 
 When the LS algorithm terminates, we have, for each node, its predecessor along the least-cost path from the source node. For each predecessor, we also have its predecessor, and so in this manner we can construct the entire path from the source to all destinations. The forwarding table in a node, say node u, can then be constructed from this information by storing, for each destination, the next-hop node on the least-cost path from u to the destination. Figure 4.28 shows the resulting least-cost paths and forwarding table in u for the network in Figure 4.27.  
 
 ![4_28](https://github.com/opwid/Library/blob/master/Computer-Networking-A-Top-Down-Approach/Images/4_28.png) 
+
+
+Having studied the LS algorithm, let's consider the other major routing algorithm that is used in practice today—the distance-vector routing algorithm.
+
+## The Distance-Vector (DV) Routing Algorithm
+
+Whereas the LS algorithm is an algorithm using global information, the distance-vector (DV) algorithm is iterative, asynchronous, and distributed. It is distributed in that each node receives some information from one or more of its directly attached neighbors, performs a calculation, and then distributes the results of its calculation back to its neighbors. It is iterative in that this process continues on until no more information is exchanged between neighbors. (Interestingly, the algorithm is also self-terminating -there is no signal that the computation should stop; it just stops.) The algorithm is asynchronous in that it does not require all of the nodes to operate in lockstep with each other.  
+
+Before we present the DV algorithm, it will prove beneficial to discuss an important relationship that exists among the costs of the least-cost paths. Let d<sub>x</sub>(y) be the cost of the least-cost path from node x to node y. Then the least costs are
+related by the celebrated Bellman-Ford equation, namely,  
+
+d<sub>x</sub>(y) = min<sub></sub>{c(x,v) + d<sub>v</sub>(y)},  
+
+where the min<sub>v</sub> in the equation is taken over all of x's neighbors. The Bellman-Ford equation is rather intuitive. Indeed, after traveling from x to v, if we then take the least-cost path from v to y, the path cost will be c(x,v) + d<sub>v</sub>(y). Since we must begin by traveling to some neighbor v, the least cost from x to y is the minimum of c(x,v) + d<sub>v</sub>(y) taken over all neighbors v.  
+
+In Figure 4.27 The source node u has three neighbors: nodes v, x, and w. By walking along various paths in the graph, it is easy to see that d<sub>v</sub>(z) = 5, d<sub>x</sub>(z) = 3, and d<sub>w</sub>(z) = 3. Plugging these values into Bellman-Ford equation, along with the costs c(u,v) = 2, c(u,x) = 1, and c(u,w) = 5, gives d<sub>u</sub>(z) = min{2 + 5, 5 + 3, 1 + 3} = 4, which is obviously true and which is exactly what the Dijskstra algorithm gave us for the same network. This quick verification should help relieve any skepticism you may have.  
+
+The basic idea is as follows. Each node x begins with D<sub>x</sub>(y), an estimate of the cost of the least-cost path from itself to node y, for all nodes in N. Let D<sub>x</sub> = [D<sub>x</sub>(y): y in N] be node x's distance vector, which is the vector of cost estimates from x to all other nodes, y, in N. With the DV algorithm, each node x maintains the following routing information:  
+
+* For each neighbor v, the cost c(x,v) from x to directly attached neighbor, v
+* Node x's distance vector, that is, D<sub>x</sub> = [D<sub>x</sub>(y): y in N], containing x's estimate of its cost to all destinations, y, in N
+* The distance vectors of each of its neighbors, that is, D<sub>v</sub> = [D<sub>v</sub>(y): y in N] for each neighbor v of x
+
+In the distributed, asynchronous algorithm, from time to time, each node sends a copy of its distance vector to each of its neighbors. When a node x receives a new distance vector from any of its neighbors v, it saves v's distance vector, and then uses the Bellman-Ford equation to update its own distance vector as follows:  
+
+D<sub>x</sub>(y) = min<sub>v</sub>{c(x,v) + D<sub>v</sub>(y)} for each node y in N  
+
+If node x's distance vector has changed as a result of this update step, node x will then send its updated distance vector to each of its neighbors, which can in turn update their own distance vectors.  
+
+In the DV algorithm, a node x updates its distance-vector estimate when it either sees a cost change in one of its directly attached links or receives a distance-vector update from some neighbor. But to update its own forwarding table for a given destination y, what node x really needs to know is not the shortest-path distance to y but instead the neighboring node v\*(y) that is the next-hop router along the shortest path to y. As you might expect, the next-hop router v\*(y) is the neighbor v that achieves the minimum. (If there are multiple neighbors v that achieve the minimum, then v\*(y) can be any of the minimizing
+neighbors.) Thus, for each destination y, node x also determines v\*(y) and updates its forwarding table for destination y.  
+
+The DV algorithm is decentralized and does not use such global information. Indeed, the only information a node will have is the costs of the links to its directly attached neighbors and information it receives from these neighbors. Each node waits for an update from any neighbor, calculates its new distance vector when receiving an update, and distributes its new distance vector to its neighbors. DV-like algorithms are used in many routing protocols in practice, including the Internet's RIP and BGP, ISO IDRP, Novell IPX, and the original ARPAnet.  
+
+***
+See lecture notes for an example about DV routing.
+***
+
+
+<h3>&nbsp;&nbsp;&nbsp;&nbsp;A Comparison of LS and DV Routing Algorithms</h3>
+
+In the DV algorithm, each node talks to only its directly connected neighbors, but it provides its neighbors with least-cost estimates from itself to all the nodes (that it knows about) in the network. In the LS algorithm, each node talks with all other nodes (via broadcast), but it tells them only the costs of its directly connected links. Recall that N is the set of nodes (routers) and E is the set of edges (links).
+
+* Message complexity: We have seen that LS requires each node to know the cost of each link in the network. This requires O(|N||E|) messages to be sent. Also, whenever a link cost changes, the new link cost must be sent to all nodes. The DV algorithm requires message exchanges between directly connected neighbors at each iteration. We have seen that the time needed for the algorithm to converge can depend on many factors. When link costs change, the DV algorithm will propagate the results of the changed link cost only if the new link cost results in a changed least-cost path for one of the nodes attached to that link.
+* Speed of convergence: We have seen that our implementation of LS is an O(|N|<sup>2</sup>) algorithm requiring O(|N||E|)) messages. The DV algorithm can converge slowly and can have routing loops while the algorithm is converging. DV also suffers from the count-to-infinity problem.
+* Robustness: What can happen if a router fails, misbehaves, or is sabotaged? Under LS, a router could broadcast an incorrect cost for one of its attached links (but no others). A node could also corrupt or drop any packets it received as part of an LS broadcast. But an LS node is computing only its own forwarding tables; other nodes are performing similar calculations for themselves. This means route calculations are somewhat separated under LS, providing a degree of robustness. Under DV, a node can advertise incorrect least-cost paths to any or all destinations. (Indeed, in 1997, a malfunctioning router in a small ISP provided national backbone routers with erroneous routing information. This caused other routers to flood the malfunctioning router with traffic and caused large portions of the Internet to become disconnected for up to several hours) More generally, we note that, at each iteration, a node's calculation in DV is passed on to its neighbor and then indirectly to its neighbor's neighbor on the next iteration. In this sense, an incorrect node calculation can be diffused through the entire network under DV.
+
+In the end, neither algorithm is an obvious winner over the other; indeed, both algorithms are used in the Internet.
 
 
 
