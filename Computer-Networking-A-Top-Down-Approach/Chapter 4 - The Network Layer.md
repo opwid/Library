@@ -299,7 +299,16 @@ As an example, let's consider the network in Figure 4.27 and compute the least-c
 ![Table4_3](https://github.com/opwid/Library/blob/master/Computer-Networking-A-Top-Down-Approach/Images/Table4_3.png) 
 
 
-Let's consider the few first steps in detail.
+Let's consider the few first steps in detail:
+
+* In the initialization step, the currently known least-cost paths from u to its directly attached neighbors,v, x,and w,are initialized to 2, 1, and 5, respectively. Note in particular that the cost to w is set to 5 (even though we will soon see that a lesser-cost path does indeed exist) since this is the cost of the direct (one hop) link from u to w.The costs to y and z are set to infinity because they are not directly connected to u.
+* In the first iteration, we look among those nodes not yet added to the set N' and find that node with the least cost as of the end of the previous iteration. That node is x, with a cost of 1, and thus x is added to the setN'. Line 12 of the LS algorithm is then performed to update D(v) for all nodes v, yielding the results show n in the second line (Step 1) in Table 4.3. The cost of the path to v is unchanged. The cost of the path to w (which was 5 at the end of the initialization) through node x is found to have a cost of 4. Hence this lower-cost path is selected and w's predecessor along the shortest path from u is set to x. Similarly, the cost to y(throughx) is computed to be 2, and the table is updated accordingly.
+* In the second iteration, nodes v and y are found to have the least-cost paths (2),and we break the tie arbitrarily and add y to the set N' so that N' now contains u,x, and y.The cost to the remaining nodes not yet in N', that is, nodes v, w,and z, are updated via line 12 of the LS algorithm, yielding the results shown in the third row in the Table 4.3.
+* And so on..
+
+When the LS algorithm terminates, we have, for each node, its predecessor along the least-cost path from the source node. For each predecessor, we also have its predecessor, and so in this manner we can construct the entire path from the source to all destinations. The forwarding table in a node, say node u, can then be constructed from this information by storing, for each destination, the next-hop node on the least-cost path from u to the destination. Figure 4.28 shows the resulting least-cost paths and forwarding table in u for the network in Figure 4.27.  
+
+![4_28](https://github.com/opwid/Library/blob/master/Computer-Networking-A-Top-Down-Approach/Images/4_28.png) 
 
 
 
