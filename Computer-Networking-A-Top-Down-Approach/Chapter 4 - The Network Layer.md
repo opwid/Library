@@ -284,7 +284,22 @@ A third way to classify routing algorithms is according to whether they are load
 
 ## The Link State (LS) Routing Algorithm
 
+Recall that in a link-state algorithm, the network topology and all link costs are known, that is, available as input to the LS algorithm. In practice this is accomplished by having each node broadcast link-state packets to all other nodes in the network, with each link-state packet containing the identities and costs of its attached links. In practice this is often accomplished by a link-state broadcast algorithm. We'll cover broadcast algorithms in Section 4.7. The result of the nodes' broadcast is that all nodes have an identical and complete view of the network. Each node can then run the LS algorithm and compute the same set of least-cost paths as every other node.  
 
+The link-state routing algorithm we present below is known as Dijkstra's algorithm, named after its inventor. Dijkstra's algorithm computes the least-cost path from one node (the source, which we will refer to as u) to all other nodes in the network. Dijkstra's algorithm is iterative and has the property that after the kth iteration of the algorithm, the least-cost paths are known to k destination nodes, and among the least-cost paths to all destination nodes, these k paths will have the k smallest costs. Let us define the following notation:
+
+* D(v): cost of the least-cost path from the source node to destination v as of this iteration of the algorithm
+* p(v): previous node (neighbor of v) along the current least-cost path from the source to v
+* N': subset of nodes; v is in N' if the least-cost path from the source to v is definitively known
+
+The global routing algorithm consists of an initialization step followed by a loop. The number of times the loop is executed is equal to the number of nodes in the network. Upon termination, the algorithm will have calculated the shortest paths from the source node u to every other node in the network.  
+
+As an example, let's consider the network in Figure 4.27 and compute the least-cost paths from u to all possible destinations. A tabular summary of the algorithm's computation is shown in Table 4.3, where each line in the table gives the values of the algorithm's variables at the end of the iteration.  
+
+![Table4_3](https://github.com/opwid/Library/blob/master/Computer-Networking-A-Top-Down-Approach/Images/Table4_3.png) 
+
+
+Let's consider the few first steps in detail.
 
 
 
