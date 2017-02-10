@@ -59,6 +59,28 @@ The SQL query language is nonprocedural. A query takes as input several tables (
 
 > select instructor.name from instructor where instructor.dept name = 'History';
 
+Queries may involve information from more than one table. For instance, the following query finds the instructor ID and department name of all instructors associated with a department with budget of greater than $95,000.  
+
+> select instructor. ID , department.dept name from instructor, department where instructor.dept name= department.dept name and department.budget > 95000;
+
+## Data-Definition Language
+SQL provides a rich DDL that allows one to define tables, integrity constraints, assertions, etc. For instance, the following SQL DDL statement defines the department table:
+
+> create table department (dept name char (20),building char (15), budget numeric (12,2));
+
+# Database Design
+
+## The Entity-Relationship Model
+The entity-relationship (E-R) data model uses a collection of basic objects, called entities, and relationships among these objects. An entity is a "thing" or "object" in the real world that is distinguishable from other objects. For example, each person is an entity, and bank accounts can be considered as entities.
+
+Entities are described in a database by a set of attributes. For example, the attributes _dept_name_, _building_, and _budget_ may describe one particular department in a university, and they form attributes of the _department_ entity set. Similarly, attributes _ID_, _name_, and _salary_ may describe an _instructor_ entity.  
+
+A relationship is an association among several entities. For example, a member relationship associates an instructor with her department. The set of all entities of the same type and the set of all relationships of the same type are termed an entity set and relationship set, respectively.  
+
+The overall logical structure (schema) of a database can be expressed graphically by an entity-relationship (E-R) diagram. There are several ways in which to draw these diagrams. One of the most popular is to use the __Unified Modeling Language__ (__UML__). In the notation we use, which is based on UML, an E-R diagram is represented as follows:  
+
+![Figure 1.3](https://github.com/opwid/Library/blob/master/Database%20System%20Concepts/Images/Figure%201.3.png)
+
 
 
 
