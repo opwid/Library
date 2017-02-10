@@ -54,7 +54,10 @@ Each table has multiple columns and each column has a unique name. Figure 1.2 pr
 ![Figure 1.2](https://github.com/opwid/Library/blob/master/Database%20System%20Concepts/Images/Figure%201.2.png)
 
 
+## Data-Manipulation Language
+The SQL query language is nonprocedural. A query takes as input several tables (possibly only one) and always returns a single table. Here is an example of an SQL query that finds the names of all instructors in the History department:  
 
+> select instructor.name from instructor where instructor.dept name = 'History';
 
 
 
