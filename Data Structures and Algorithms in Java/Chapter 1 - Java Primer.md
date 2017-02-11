@@ -1,1 +1,37 @@
-a
+```Java
+//Code Fragment 1.2
+
+public class Counter {
+  private int count; // a simple integer instance variable
+  public Counter( ) { } // default constructor (count is 0)
+  public Counter(int initial) { count = initial; } // an alternate constructor
+  public int getCount( ) { return count; } // an accessor method
+  public void increment( ) { count++; } // an update method
+  public void increment(int delta) { count += delta; } // an update method
+  public void reset( ) { count = 0; } // an update method
+}
+```
+```Java
+//Code Fragment 1.3
+
+public class CounterDemo {
+  public static void main(String[ ] args) {
+  Counter c; // declares a variable; no counter yet constructed
+  c = new Counter( ); // constructs a counter; assigns its reference to c
+  c.increment( ); // increases its value by one
+  c.increment(3); // increases its value by three more
+  int temp = c.getCount( ); // will be 4
+  c.reset( ); // value becomes 0
+  Counter d = new Counter(5); // declares and constructs a counter having value 5
+  d.increment( ); // value becomes 6
+  Counter e = d; // assigns e to reference the same object as d
+  temp = e.getCount( ); // will be 6 (as e and d reference the same counter)
+   e.increment(2); // value of e (also known as d) becomes 8
+
+  }
+}
+```
+
+# Access Control Modifiers
+* The __public__ class modifier designates that all classes may access the defined aspect. For example if Counter class is public, then all other classes (such as CounterDemo) are allowed to construct new instances of the Counter class, as well as to declare variables and parameters of type Counter. In Java, each public class must be defined in a separate file named classname.java, where "classname" is the name of the class (for example, file Counter.java for the Counter class definition).
+* 
