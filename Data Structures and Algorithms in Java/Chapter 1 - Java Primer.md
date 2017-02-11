@@ -33,5 +33,5 @@ public class CounterDemo {
 ```
 
 # Access Control Modifiers
-* The __public__ class modifier designates that all classes may access the defined aspect. For example if Counter class is public, then all other classes (such as CounterDemo) are allowed to construct new instances of the Counter class, as well as to declare variables and parameters of type Counter. In Java, each public class must be defined in a separate file named classname.java, where "classname" is the name of the class (for example, file Counter.java for the Counter class definition).
+* The __public__ class modifier designates that all classes may access the defined aspect. For example, line 1 of of Code Fragment 1.2 designates `public class Counter {` and therefore all other classes (such as CounterDemo) are allowed to construct new instances of the Counter class, as well as to declare variables and parameters of type Counter. In Java, each public class must be defined in a separate file named classname.java, where "classname" is the name of the class (for example, file Counter.java for the Counter class definition).
 * 
