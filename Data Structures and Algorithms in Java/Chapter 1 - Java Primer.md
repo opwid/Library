@@ -64,3 +64,19 @@ class Counter {
 }
 
 ```
+```Java
+public class CounterTest {
+
+	public static void main(String[] args) {
+		Counter test1 = new Counter(12);
+		System.out.println(Counter.count); // 1
+		System.out.println(test1.getX()); // 12
+		
+		Counter test2 = new Counter(24);
+		System.out.println(Counter.count); // 2
+		System.out.println(test2.getX()); // 24
+
+	}
+
+}
+```
