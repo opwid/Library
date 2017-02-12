@@ -40,4 +40,10 @@ public class CounterDemo {
 * The __private__ modifier specifies that the member can only be accessed in its own class. Neither subclasses nor any other classes have access to such members. For example, we defined the count instance variable of the Counter class to have private access level. We were allowed to read or edit its value from within methods of that class (such as getCount, increment, and reset), but other classes such as CounterDemo cannot directly access that field. Of course, we did provide other public methods to grant outside classes with behaviors that depended on the current count value.
 * Finally, we note that if no explicit access control modifier is given, the defined aspect has what is known as __package-private__ access level. This allows other classes in the same package to have access, but not any classes or subclasses from other packages.
 
-![Access Levels](https://github.com/opwid/Library/blob/master/Data%20Structures%20and%20Algorithms%20in%20Java/Images/Access%20Levels.png)
+![Access Levels](https://github.com/opwid/Library/blob/master/Data%20Structures%20and%20Algorithms%20in%20Java/Images/Access%20Levels.png)  
+
+* The __static__ modifier in Java can be declared for any variable or method of a class. When a variable of a class is declared as static, its value is associated with the class as a whole, rather than with each individual instance of that class. Static variables are used to store "global" information about a class. (For example, a static variable could be used to maintain the total number of instances of that class that have been created.) Static variables exist even if no instance of their class exists. The static variable gets memory only once in class area at the time of class loading. 
+* When a method of a class is declared as static, it too is associated with the class itself, and not with a particular instance of the class. That means that the method is not invoked on a particular instance of the class using the traditional dot notation. Instead, it is typically invoked using the name of the class as a qualifier.
+   ```Java
+   asd
+   ```
