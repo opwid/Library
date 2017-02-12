@@ -100,9 +100,7 @@ Hello World!
 * When a parameter is __passed by reference__, the caller and the callee use the same variable for the parameter. If the callee modifies the parameter variable, the effect is visible to the caller's variable. When a parameter is __passed by value__, the caller and callee have two independent variables with the same value. If the callee modifies the parameter variable, the effect is not visible to the caller. However, if the value in question is a mutable reference-type object or otherwise indirectly references other values, then you can emulate call-by-reference in a call-by-value environment: if the callee modifies the object (or other values pointed to by the object), those modifications are visible to the caller. But the emulation isn't exactly the same, since only modifications to the object, not to the variable, are visible. This leads to contorted explanations like "call by value where the value is a reference". This somewhat confusing state of affairs is how many popular programming languages work today, and therefore people often confuse passing mutable objects by value with call-by-reference.
 ```Java
 public class BuilderTest {
-
 	public static void main(String[] args) {
-		
 		StringBuilder str1 = new StringBuilder("Hello ");
 		concat1(str1);
 		System.out.println(str1);
@@ -110,22 +108,16 @@ public class BuilderTest {
 		String str2 = "Hello";
 		concat2(str2);
 		System.out.println(str2);
-		
-
 	}
 	public static void concat1(StringBuilder str1){
 		
 		str1.append("World!");
-		
 	}
 	public static void concat2(String str1){
 		
 		str1 += ("World");		
-		
 	}
-
 }
-
 ```
 
 
