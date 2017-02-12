@@ -119,6 +119,8 @@ public class BuilderTest {
 	}
 }
 ```
+* Normally, when we work with Numbers, we use primitive data types such as byte, int, long, double, etc. However, in development, we come across situations where we need to use objects instead of primitive data types. In order to achieve this, Java provides wrapper classes. All the wrapper classes (Integer, Long, Byte, Double, Float, Short) are subclasses of the abstract class Number.
+* In any context for which an Integer is expected (for example, as a parameter), an int value k can be expressed, in which case Java automatically boxes the int, with an implicit call to _new Integer(k)_. In reverse, in any context for which an int is expected, an Integer value v can be given in which case Java automatically unboxes it with an implicit call to _v.intValue()_. Similar conversions are made with the other base-type wrappers.
 
 
 
