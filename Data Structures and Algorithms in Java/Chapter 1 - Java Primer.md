@@ -40,6 +40,8 @@ public class CounterDemo {
 
 ![Access Levels](https://github.com/opwid/Library/blob/master/Data%20Structures%20and%20Algorithms%20in%20Java/Images/Access%20Levels.png)  
 
+The first data column indicates whether the class itself has access to the member defined by the access level. As you can see, a class always has access to its own members. The second column indicates whether classes in the same package as the class (regardless of their parentage) have access to the member. The third column indicates whether subclasses of the class declared outside this package have access to the member. The fourth column indicates whether all classes have access to the member.
+
 * The __static__ modifier in Java can be declared for any variable or method of a class. When a variable of a class is declared as static, its value is associated with the class as a whole, rather than with each individual instance of that class. Static variables are used to store "global" information about a class. (For example, a static variable could be used to maintain the total number of instances of that class that have been created.) Static variables exist even if no instance of their class exists. The static variable gets memory only once in class area at the time of class loading. 
 * When a method of a class is declared as static, it too is associated with the class itself, and not with a particular instance of the class. That means that the method is not invoked on a particular instance of the class using the traditional dot notation. Instead, it is typically invoked using the name of the class as a qualifier. Static methods can be useful for providing utility behaviors related to a class that need not rely on the state of any particular instance of that class.  
 
