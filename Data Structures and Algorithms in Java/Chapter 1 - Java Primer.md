@@ -120,12 +120,12 @@ public class BuilderTest {
 * Normally, when we work with Numbers, we use primitive data types such as byte, int, long, double, etc. However, in development, we come across situations where we need to use objects instead of primitive data types. In order to achieve this, Java provides wrapper classes. All the wrapper classes (Integer, Long, Byte, Double, Float, Short) are subclasses of the abstract class Number.
 * In any context for which an Integer is expected (for example, as a parameter), an int value k can be expressed, in which case Java automatically boxes the int, with an implicit call to _new Integer(k)_. In reverse, in any context for which an int is expected, an Integer value v can be given in which case Java automatically unboxes it with an implicit call to _v.intValue()_. Similar conversions are made with the other base-type wrappers.
 * Casting from an int to a double is known as a widening cast, as the double type is more broad than the int type, and a conversion can be performed without losing information. But a cast from a double to an int is a narrowing cast; we may lose precision, as any fractional portion of the value will be truncated.
-* When using a __for-each loop__, there is no explicit use of array indices. The loop variable represents one particular element of the array. However, within the body of the loop, there is no designation as to which element it is.
+* When using a __for-each loop__, there is no explicit use of array indices. The loop variable represents one particular element of the array. However, within the body of the loop, there is no designation as to which element it is. It is also worth emphasizing that making an assignment to the loop variable has no effect on the underlying array.
 ```Java
 public static double sum(double[] data){
 	double total = 0;
 
-	for (double val : data){
+	for (double val : data){ // for-each loop
 		total += val;
 	}
 	return total;		
