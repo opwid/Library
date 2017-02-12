@@ -48,13 +48,13 @@ public class CounterDemo {
     ```Java
     class Counter {
     	int x = 0;
-	static int count = 0;
+        static int count = 0;
 
-	Counter(){	
-		this.x = 0;
-		count++;
+        Counter(){	
+                this.x = 0;
+                count++;
 	}
-	Counter(int x){	
+        Counter(int x){	
 		this.x = x;
 		count++;
 	}
