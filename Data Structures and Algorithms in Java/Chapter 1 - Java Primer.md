@@ -53,13 +53,13 @@ public class CounterDemo {
         Counter(){	
                 this.x = 0;
                 count++;
-	}
-        Counter(int x){	
-		this.x = x;
+        }
+	Counter(int x){	
+                this.x = x;
 		count++;
 	}
 	int getX(){
-		return x;
+	        return x;
 	}
     }
 
