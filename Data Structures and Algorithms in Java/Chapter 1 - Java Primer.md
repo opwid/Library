@@ -94,4 +94,5 @@ public class CounterTest {
 user@linux~/.../publictest/bin$: java -cp(or -classpath) . publicpackage.HelloWorld
 Hello World!
 ```
+* An important trait of Java's String class is that its instances are immutable; once an instance is created and initialized, the value of that instance cannot be changed. This is an intentional design, as it allows for great efficiencies and optimizations within the Java Virtual Machine.
 
