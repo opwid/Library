@@ -46,5 +46,25 @@ public class CounterDemo {
 * When a method of a class is declared as static, it too is associated with the class itself, and not with a particular instance of the class. That means that the method is not invoked on a particular instance of the class using the traditional dot notation. Instead, it is typically invoked using the name of the class as a qualifier.  
 
     ```Java
-    asd
+    class Counter {
+	
+	 int x = 0;
+	 static int count = 0;
+	
+	 Counter(){
+		
+		this.x = 0;
+		count++;
+	}
+	 Counter(int x){
+		
+		this.x = x;
+		count++;
+	}
+	 int getX(){
+		return x;
+	}
+
+}
+
     ```
