@@ -31,8 +31,6 @@ public class CounterDemo {
   }
 }
 ```
-
-# Access Control Modifiers
 * The __public__ class modifier designates that all classes may access the defined aspect. For example, line 1 of of Code Fragment 1.2 designates `public class Counter {` and therefore all other classes (such as CounterDemo) are allowed to construct new instances of the Counter class, as well as to declare variables and parameters of type Counter. In Java, each public class must be defined in a separate file named classname.java, where "classname" is the name of the class (for example, file Counter.java for the Counter class definition).
 * The designation of public access for a particular method of a class allows any other class to make a call to that method. For example, line 5 of Code Fragment 1.2 designates `public int getCount( ) { return count; }` which is why the CounterDemo class may call c.getCount( ).
 * If an instance variable is declared as public, dot notation can be used to directly access the variable by code in any other class that possesses a reference to an instance of this class. For example, were the count variable of Counter to be declared as public (which it is not), then the CounterDemo would be allowed to read or modify that variable using a syntax such as c.count.
@@ -121,6 +119,17 @@ public class BuilderTest {
 ```
 * Normally, when we work with Numbers, we use primitive data types such as byte, int, long, double, etc. However, in development, we come across situations where we need to use objects instead of primitive data types. In order to achieve this, Java provides wrapper classes. All the wrapper classes (Integer, Long, Byte, Double, Float, Short) are subclasses of the abstract class Number.
 * In any context for which an Integer is expected (for example, as a parameter), an int value k can be expressed, in which case Java automatically boxes the int, with an implicit call to _new Integer(k)_. In reverse, in any context for which an int is expected, an Integer value v can be given in which case Java automatically unboxes it with an implicit call to _v.intValue()_. Similar conversions are made with the other base-type wrappers.
+* Casting from an int to a double is known as a widening cast, as the double type is more broad than the int type, and a conversion can be performed without losing information. But a cast from a double to an int is a narrowing cast; we may lose precision, as any fractional portion of the value will be truncated.
+* When using a __for-each loop__, there is no explicit use of array indices. The loop variable represents one particular element of the array. However, within the body of the loop, there is no designation as to which element it is.
+```Java
+public static double sum(double[] data){
+	double total = 0;
 
+	for (double val : data){
+		total += val;
+	}
+	return total;		
+}
+```
 
 
