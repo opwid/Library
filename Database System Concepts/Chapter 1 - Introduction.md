@@ -57,16 +57,20 @@ Each table has multiple columns and each column has a unique name. Figure 1.2 pr
 ## Data-Manipulation Language
 The SQL query language is nonprocedural. A query takes as input several tables (possibly only one) and always returns a single table. Here is an example of an SQL query that finds the names of all instructors in the History department:  
 ```SQL
-select instructor.name from instructor where instructor.dept name = 'History';
+select instructor.name 
+from instructor 
+where instructor.dept_name = 'History';
 ```
 Queries may involve information from more than one table. For instance, the following query finds the instructor ID and department name of all instructors associated with a department with budget of greater than $95,000.  
 ```SQL
-select instructor. ID , department.dept name from instructor, department where instructor.dept name= department.dept name and department.budget > 95000;
+select instructor. ID , department.dept_name 
+from instructor, department 
+where instructor.dept name= department.dept_name and department.budget > 95000;
 ```
 ## Data-Definition Language
 SQL provides a rich DDL that allows one to define tables, integrity constraints, assertions, etc. For instance, the following SQL DDL statement defines the department table:
 ```SQL
-create table department (dept name char (20),building char (15), budget numeric (12,2));
+create table department (dept_name char (20),building char (15), budget numeric (12,2));
 ```
 # Database Design
 
