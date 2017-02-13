@@ -70,6 +70,15 @@ The __select__ clause may also contain arithmetic expressions involving the oper
 select ID , name, dept name, salary * 1.1
 from instructor;
 ```
-returns a relation that is the same as the instructor relation, except that the attribute salary is multiplied by 1.1.
+returns a relation that is the same as the instructor relation, except that the attribute salary is multiplied by 1.1.  
 
+The __where__ clause allows us to select only those rows in the result relation of the from clause that satisfy a specified predicate. Consider the query "Find the names of all instructors in the Computer Science department who have salary greater than $70,000." This query can be written in SQL as:
+```SQL
+select name
+from instructor
+where dept_name = 'Comp. Sci.' and salary > 70000;
+```
+SQL allows the use of the logical connectives and, or, and not in the where clause. The operands of the logical connectives can be expressions involving the comparison operators <, <=, >, >=, =, and <>. SQL allows us to use the comparison operators to compare strings and arithmetic expressions, as well as special types, such as date types.
+
+## Queries on Multiple Relations
 
