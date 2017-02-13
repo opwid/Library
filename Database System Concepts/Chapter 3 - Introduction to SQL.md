@@ -53,4 +53,23 @@ where r is the name of an existing relation, and A is the name of an attribute o
 
 # Basic Structure of SQL Queries
 
+## Queries on a Single Relation
+Consider another query, "Find the department names of all instructors," which can be written as:
+```SQL
+select dept_name from instructor;
+```
+Since more than one instructor can belong to a department, a department name could appear more than once in the instructor relation. In practice, duplicate elimination is time-consuming. Therefore, SQL allows duplicates in relations as well as in the results of SQL expressions. Thus, the preceding SQL query lists each department name once for every tuple in which it appears in the instructor relation. In those cases where we want to force the elimination of duplicates, we insert the keyword __distinct__ after select. We can rewrite the preceding query as:
+```SQL
+select distinct dept_name from instructor;
+```
+
+SQL allows us to use the keyword __all__ to specify explicitly that duplicates are not removed. Since duplicate retention is the default, we shall not use all in our examples.  
+
+The __select__ clause may also contain arithmetic expressions involving the operators +, −, \∗, and / operating on constants or attributes of tuples. For example, the query: 
+```SQL
+select ID , name, dept name, salary \* 1.1
+from instructor;
+```
+returns a relation that is the same as the instructor relation, except that the attribute salary is multiplied by 1.1.
+
 
