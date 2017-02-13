@@ -11,3 +11,13 @@ The set of relations in a database must be specified to the system by means of a
 * float(n): A floating-point number, with precision of at least n digits.
 
 Each type may include a special value called the null value.
+
+## Basic Schema Definition
+We define an SQL relation by using the __create table__ command.
+```SQL
+create table department
+(dept_name varchar (20),
+building varchar (15),
+budget numeric (12,2),
+primary key (dept_name));
+```
