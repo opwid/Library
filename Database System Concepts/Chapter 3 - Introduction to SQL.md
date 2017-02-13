@@ -65,9 +65,9 @@ select distinct dept_name from instructor;
 
 SQL allows us to use the keyword __all__ to specify explicitly that duplicates are not removed. Since duplicate retention is the default, we shall not use all in our examples.  
 
-The __select__ clause may also contain arithmetic expressions involving the operators +, −, \∗, and / operating on constants or attributes of tuples. For example, the query: 
+The __select__ clause may also contain arithmetic expressions involving the operators +, −, *, and / operating on constants or attributes of tuples. For example, the query: 
 ```SQL
-select ID , name, dept name, salary \* 1.1
+select ID , name, dept name, salary * 1.1
 from instructor;
 ```
 returns a relation that is the same as the instructor relation, except that the attribute salary is multiplied by 1.1.
