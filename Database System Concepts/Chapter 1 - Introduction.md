@@ -65,7 +65,7 @@ Queries may involve information from more than one table. For instance, the foll
 ```SQL
 select instructor. ID , department.dept_name 
 from instructor, department 
-where instructor.dept name= department.dept_name and department.budget > 95000;
+where instructor.dept_name= department.dept_name and department.budget > 95000;
 ```
 ## Data-Definition Language
 SQL provides a rich DDL that allows one to define tables, integrity constraints, assertions, etc. For instance, the following SQL DDL statement defines the department table:
