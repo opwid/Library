@@ -125,12 +125,12 @@ from instructor natural join teaches;
 ```
 Both of the above queries generate the same result.  
 
-A from clause in an SQL query can have multiple relations combined using natural join, as shown here:
-```SQL
-select A<sub>1</sub> , A<sub>2</sub>, ..., A<sub>n</sub>
-from r<sub>1</sub> natural join r<sub>2</sub> natural join . . . natural join r<sub>m</sub>
-where P;
-```
+A from clause in an SQL query can have multiple relations combined using natural join, as shown here:  
+
+select A<sub>1</sub> , A<sub>2</sub>, ..., A<sub>n</sub>  
+from r<sub>1</sub> natural join r<sub>2</sub> natural join ... natural join r<sub>m</sub>  
+where P;  
+
 For example, suppose we wish to answer the query "List the names of instructors along with the the titles of courses that they teach." The query can be written in SQL as follows:
 ```SQL
 select name, title
