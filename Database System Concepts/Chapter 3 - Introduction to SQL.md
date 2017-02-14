@@ -82,3 +82,66 @@ SQL allows the use of the logical connectives and, or, and not in the where clau
 
 ## Queries on Multiple Relations
 
+An an example, suppose we want to answer the query "Retrieve the names of all instructors, along with their department names and department building name."  
+
+Looking at the schema of the relation instructor, we realize that we can get the department name from the attribute dept_name, but the department building name is present in the attribute building of the relation department. To answer the query, each tuple in the instructor relation must be matched with the tuple in the department relation whose dept_name value matches the dept_name value of the instructor tuple.  
+
+In SQL, to answer the above query, we list the relations that need to be accessed in the from clause, and specify the matching condition in the where clause. The above query can be written in SQL as
+```SQL
+select name, instructor.dept_name, building
+from instructor, department
+where instructor.dept_name= department.dept_name;
+```
+Note that the attribute dept_name occurs in both the relations instructor and department, and the relation name is used as a prefix (in instructor.dept_name, and department.dept_name) to make clear to which attribute we are referring. In contrast, the attributes name and building appear in only one of the relations, and therefore do not need to be prefixed by the relation name.  
+
+The role of each clause is as follows:
+* The select clause is used to list the attributes desired in the result of a query.
+* The from clause is a list of the relations to be accessed in the evaluation of the query. The from clause by itself defines a __Cartesian product__ of the relations listed in the clause.
+* The where clause is a predicate involving attributes of the relation in the from clause.
+
+The predicate in the where clause is used to restrict the combinations created by the Cartesian product to those that are meaningful for the desired answer. We would expect a query involving instructor and teaches to combine a particular tuple t in instructor with only those tuples in teaches that refer to the same instructor to which t refers. That is, we wish only to match teaches tuples with instructor tuples that have the same ID value. The following SQL query ensures this condition, and outputs the instructor name and course identifiers from such matching tuples.
+```SQL
+select name, course_id
+from instructor, teaches
+where instructor.ID = teaches.ID;
+```
+
+## The Natural Join 
+
+In our example query that combined information from the instructor and teaches table, the matching condition required instructor.ID to be equal to teaches.ID. These are the only attributes in the two relations that have the same name. In fact this is a common case; that is, the matching condition in the from clause most often requires all attributes with matching names to be equated. To make the life of an SQL programmer easier for this common case, SQL supports an operation called the __natural join__, which we describe below. In fact SQL supports several other ways in which information from two or more relations can be joined together. We have already seen how a Cartesian product along with a where clause predicate can be used to join information from multiple relations.  
+
+The natural join operation operates on two relations and produces a relation as the result. Unlike the Cartesian product of two relations, which concatenates each tuple of the first relation with every tuple of the second, natural join considers only those pairs of tuples with the same value on those attributes that appear in the schemas of both relations. So, going back to the example of the relations instructor and teaches, computing instructor natural join teaches considers only those pairs of tuples where both the tuple from instructor and the tuple from teaches have the same value on the common attribute, ID.  
+
+Consider the query "For all instructors in the university who have taught some course, find their names and the course ID of all courses they taught", which we wrote earlier as:
+```SQL
+select name, course_id
+from instructor, teaches
+where instructor.ID = teaches.ID ;
+```
+This query can be written more concisely using the natural-join operation in SQL as:
+```SQL
+select name, course_id
+from instructor natural join teaches;
+```
+Both of the above queries generate the same result.  
+
+A from clause in an SQL query can have multiple relations combined using natural join, as shown here:
+```SQL
+select A<sub>1</sub> , A<sub>2</sub>, ..., A<sub>n</sub>
+from r<sub>1</sub> natural join r<sub>2</sub> natural join . . . natural join r<sub>m</sub>
+where P;
+```
+For example, suppose we wish to answer the query "List the names of instructors along with the the titles of courses that they teach." The query can be written in SQL as follows:
+```SQL
+select name, title
+from instructor natural join teaches, course
+where teaches.course_id = course.course_id;
+```
+The natural join of instructor and teaches is first computed, as we saw earlier, and a Cartesian product of this result with course is computed, from which the where clause extracts only those tuples where the course identifier from the join result matches the course identifier from the course relation. Note that teaches.course_id in the where clause refers to the course_id field of the natural join result, since this field in turn came from the teaches relation.  
+
+To provide the benefit of natural join while avoiding the danger of equating attributes erroneously, SQL provides a form of the natural join construct that allows you to specify exactly which columns should be equated. This feature is illustrated by the following query:
+```SQL
+select name, title
+from (instructor natural join teaches) join course using (course id);
+```
+The operation __join ... using__ requires a list of attribute names to be specified. Both inputs must have attributes with the specified names. Consider the operation r<sub>1</sub> join r<sub>2</sub> using(A<sub>1</sub>, A<sub>2</sub>). The operation is similar to r<sub>1</sub> natural join r<sub>2</sub>, except that a pair of tuples t<sub>1</sub> from r<sub>1</sub> and t<sub>2</sub> from r<sub>2</sub> match if t<sub>1</sub>.A<sub>1</sub> = t<sub>2</sub>.A<sub>1/sub> and t<sub>1</sub>.A<sub>2</sub> = t<sub>2</sub>.A<sub>2</sub>; even if r<sub>1</sub> and r<sub>2</sub> both have an attribute named A<sub>3</sub>, it is not required that t<sub>1</sub>.A<sub>3</sub> = t<sub>2</sub>.A<sub>3</sub>.
