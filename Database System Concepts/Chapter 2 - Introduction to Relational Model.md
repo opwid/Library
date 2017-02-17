@@ -7,7 +7,7 @@ For each attribute of a relation, there is a set of permitted values, called the
 # Database Schema
 When we talk about a database, we must differentiate between the database schema, which is the logical design of the database, and the database instance, which is a snapshot of the data in the database at a given instant in time.
 
-The schema for department relation might be _department(dept name,_ _building,_ _budget)_
+The schema for department relation might be _department(dept_name,_ _building,_ _budget)_
 
 # Keys
 We must have a way to specify how tuples within a given relation are distinguished. This is expressed in terms of their attributes. That is, the values of the attribute values of a tuple must be such that they can uniquely identify the tuple. In other words, no two tuples in a relation are allowed to have exactly the same value for all attributes.
@@ -16,7 +16,7 @@ A __superkey__ is a set of one or more attributes that, taken collectively, allo
 
 A superkey may contain extraneous attributes. For example, the combination of _ID_ and _name_ is a superkey for the relation instructor. If K is a superkey, then so is any superset of K. We are often interested in superkeys for which no proper subset is a superkey. Such minimal superkeys are called __candidate keys__.  
 
-It is possible that several distinct sets of attributes could serve as a candidate key. Suppose that a combination of name and dept name is sufficient to distinguish among members of the instructor relation. Then, both {_ID_} and {_name_, _dept_name_} are candidate keys. Although the attributes _ID_ and _name_ together can distinguish instructor tuples, their combination, {_ID_, _name_}, does not form a candidate key, since the attribute _ID_ alone is a candidate key.  
+It is possible that several distinct sets of attributes could serve as a candidate key. Suppose that a combination of name and dept_name is sufficient to distinguish among members of the instructor relation. Then, both {_ID_} and {_name_, _dept_name_} are candidate keys. Although the attributes _ID_ and _name_ together can distinguish instructor tuples, their combination, {_ID_, _name_}, does not form a candidate key, since the attribute _ID_ alone is a candidate key.  
 
 We shall use the term __primary key__ to denote a candidate key that is chosen by the database designer as the principal means of identifying tuples within a relation. A key (whether primary, candidate, or super) is a property of the entire relation, rather than of the individual tuples.  
 
