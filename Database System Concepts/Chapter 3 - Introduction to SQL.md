@@ -145,3 +145,35 @@ select name, title
 from (instructor natural join teaches) join course using (course_id);
 ```
 The operation __join ... using__ requires a list of attribute names to be specified. Both inputs must have attributes with the specified names. Consider the operation r<sub>1</sub> join r<sub>2</sub> using(A<sub>1</sub>, A<sub>2</sub>). The operation is similar to r<sub>1</sub> natural join r<sub>2</sub>, except that a pair of tuples t<sub>1</sub> from r<sub>1</sub> and t<sub>2</sub> from r<sub>2</sub> match if t<sub>1</sub>.A<sub>1</sub> = t<sub>2</sub>.A<sub>1</sub> and t<sub>1</sub>.A<sub>2</sub> = t<sub>2</sub>.A<sub>2</sub>; even if r<sub>1</sub> and r<sub>2</sub> both have an attribute named A<sub>3</sub>, it is not required that t<sub>1</sub>.A<sub>3</sub> = t<sub>2</sub>.A<sub>3</sub>.
+
+# Additional Basic Operations
+## The Rename Operation
+Consider again the query that we used earlier:
+```SQL
+select name, course_id
+from instructor, teaches
+where instructor.ID = teaches.ID;
+```
+The names of the attributes in the result are derived from the names of the attributes in the relations in the from clause.  
+
+We cannot, however, always derive names in this way, for several reasons: First, two relations in the from clause may have attributes with the same name, in which case an attribute name is duplicated in the result. Second, if we used an arithmetic expression in the select clause, the resultant attribute does not have a name. Third, even if an attribute name can be derived from the base relations as in the preceding example, we may want to change the attribute name in the result `instructor.name`. Hence, SQL provides a way of renaming the attributes of a result relation. It uses the as clause, taking the form:
+```SQL
+select name as instructor_name, course_id
+from instructor, teaches
+where instructor.ID = teaches.ID;
+```
+```SQL
+select T.name, S.course_id
+from instructor as T, teaches as S
+where T.ID = S.ID;
+```
+Another reason to rename a relation is a case where we wish to compare tuples in the same relation.
+```SQL
+select distinct T.name
+from instructor as T, instructor as S
+where T.salary > S.salary and S.dept name = 'Biology';
+```
+Observe that we could not use the notation instructor.salary, since it would not be clear which reference to instructor is intended.
+
+## String Operations
+SQL specifies strings by enclosing them in single quotes, for example, 'Computer'. A single quote character that is part of a string can be specified by using two single quote characters; for example, the string 'It's right' can be specified by 'It''s right'. Another way is using single quote character inside double quotes; for examle, "It's right".
