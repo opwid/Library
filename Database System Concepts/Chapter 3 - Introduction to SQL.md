@@ -201,8 +201,17 @@ select concat("Departmant name:", DEPT_NAME) as department_name from department;
 +---------------------------------------+
 
 ```
+Pattern matching can be performed on strings, using the operator __like__. We describe patterns by using two special characters:
 
+* Percent (%): The % character matches any substring.
+* Underscore (_): The character matches any character.
 
+Consider the query "Find the names of all departments whose building name includes the substring 'Watson'." This query can be written as:
+```SQL
+select dept_name
+from department
+where building like '%Watson%';
+```
 
 
 
