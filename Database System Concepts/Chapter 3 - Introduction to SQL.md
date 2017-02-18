@@ -305,7 +305,7 @@ select name
 from instructor
 where salary is null;
 ```
-The predicate is not null succeeds if the value on which it is applied is not null.
+The predicate __is not null__ succeeds if the value on which it is applied is not null.
 
 # Aggregate Functions
 
