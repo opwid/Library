@@ -330,7 +330,7 @@ where dept_name= ’Comp. Sci.’;
 
 There are cases where we must eliminate duplicates before computing an aggregate function. If we do want to eliminate duplicates, we use the keyword __distinct__ in the aggregate expression. An example arises in the query "Find the total number of instructors who teach a course in the Spring 2010 semester." In this case, an instructor counts only once, regardless of the number of course sections that the instructor teaches. The required information is contained in the relation teaches, and we write this query as follows:
 ```SQL
-select count (distinct ID )
+select count(distinct ID )
 from teaches
 where semester = 'Spring' and year = 2010;
 ```
@@ -364,7 +364,7 @@ select course id, semester, year, sec_id, avg (tot_cred)
 from takes natural join student
 where year = 2009
 group by course id, semester, year, sec_id
-having count (ID) >= 2;
+having count(ID) >= 2;
 ```
 ## Aggregation with Null and Boolean Values
 
