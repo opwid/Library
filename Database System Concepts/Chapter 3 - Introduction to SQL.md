@@ -187,7 +187,17 @@ select concat("Departmant name:", DEPT_NAME) from department;
 | Departmant name:CE                    |
 | Departmant name:EE                    |
 | Departmant name:History               |
-| Departmant name:MAVA                  |
+| Departmant name:Arts                  |
++---------------------------------------+
+
+select concat("Departmant name:", DEPT_NAME) as department_name from department;
++---------------------------------------+
+| department_name                       |
++---------------------------------------+
+| Departmant name:CE                    |
+| Departmant name:EE                    |
+| Departmant name:History               |
+| Departmant name:Arts                  |
 +---------------------------------------+
 
 ```
