@@ -371,7 +371,7 @@ having count(ID) >= 2;
 In general, aggregate functions treat nulls according to the following rule: All aggregate functions except count (\*) ignore null values in their input collection. As a result of null values being ignored, the collection of values may be empty. The count of an empty collection is defined to be 0, and all other aggregate operations return a value of null when applied on an empty collection.
 
 # Nested Subqueries
-## Set Membetship
+## Set Membership
 
 SQL allows testing tuples for membership in a relation. The __in__ connective tests for set membership, where the set is a collection of values produced by a select clause. The __not in__ connective tests for the absence of set membership.  
 
