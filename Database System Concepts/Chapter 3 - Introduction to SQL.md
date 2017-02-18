@@ -358,9 +358,9 @@ from instructor
 group by dept_name
 having avg (salary) > 42000;
 ```
-To illustrate the use of both a having clause and a where clause in the same query, we consider the query "For each course section offered in 2009, find the average total credits (tot cred) of all students enrolled in the section, if the section had at least 2 students."
+To illustrate the use of both a having clause and a where clause in the same query, we consider the query "For each course section offered in 2009, find the average total credits (tot_cred) of all students enrolled in the section, if the section had at least 2 students."
 ```SQL
-select course id, semester, year, sec_id, avg (tot cred)
+select course id, semester, year, sec_id, avg (tot_cred)
 from takes natural join student
 where year = 2009
 group by course id, semester, year, sec_id
