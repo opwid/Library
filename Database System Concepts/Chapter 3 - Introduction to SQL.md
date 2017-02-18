@@ -213,10 +213,237 @@ from department
 where building like '%Watson%';
 ```
 
+SQL allows us to search for mismatches instead of matches by using the __not like__ comparison operator.
+
+## Ordering the Display of Tuples
+
+SQL offers the user some control over the order in which tuples in a relation are displayed. The __order by__ clause causes the tuples in the result of a query to appear in sorted order.
+```SQL
+select name
+from instructor
+where dept_name = ’Physics’
+order by name;
+```
+By default, the order by clause lists items in ascending order. To specify the sort order, we may specify desc for descending order or asc for ascending order. Furthermore, ordering can be performed on multiple attributes. Suppose that we wish to list the entire instructor relation in descending order of salary. If several instructors have the same salary, we order them in ascending order by name. We express this query in SQL as follows:
+```SQL
+select *
+from instructor
+order by salary desc, name asc;
+```
+## Where Clause Predicates
+
+SQL includes a __between__ comparison operator to simplify where clauses that specify that a value be less than or equal to some value and greater than or equal to some other value. If we wish to find the names of instructors with salary amounts between $90,000 and $100,000, we can use the between comparison to write:
+```SQL
+select name
+from instructor
+where salary between 90000 and 100000;
+```
+instead of:
+```SQL
+select name
+from instructor
+where salary <= 100000 and salary >= 90000;
+```
+Similarly, we can use the __not between__ comparison operator.
+
+# Set Operations
+## The Union Operation
+
+To find the set of all courses taught either in Fall 2009 or in Spring 2010, or both, we write:
+```SQL
+(select course_id
+from section
+where semester = 'Fall' and year= 2009)
+union
+(select course_id
+from section
+where semester = 'Spring' and year= 2010);
+```
+The union operation automatically eliminates duplicates, unlike the select clause. If we want to retain all duplicates, we must write union all in place of union.
+
+## The Intersect Operation
+
+To find the set of all courses taught in the Fall 2009 as well as in Spring 2010 we write:
+```SQL
+(select course_id
+from section
+where semester = 'Fall' and year= 2009)
+intersect
+(select course_id
+from section
+where semester = 'Spring' and year= 2010);
+```
+The intersect operation automatically eliminates duplicates. If we want to retain all duplicates, we must write intersect all in place of intersect.
+
+## The Except Operation
+To find all courses taught in the Fall 2009 semester but not in the Spring 2010 semester, we write:
+```SQL
+(select course_id
+from section
+where semester = 'Fall' and year= 2009)
+except
+(select course_id
+from section
+where semester = 'Spring' and year= 2010);
+```
+If we want to retain duplicates, we must write except all in place of except. 
+
+# Null Values
+
+Comparisons involving nulls are more of a problem. For example, consider the comparison "1 < null". It would be wrong to say this is true since we do not know what the null value represents. But it would likewise be wrong to claim this expression is false; if we did, "not (1 < null)" would evaluate to true, which does not make sense. SQL therefore treats as unknown the result of any comparison involving a null value (other than predicates is null and is not null, which are described later in this section). This creates a third logical value in addition to true and false.  
+
+Since the predicate in a where clause can involve Boolean operations such as and, or, and not on the results of comparisons, the definitions of the Boolean operations are extended to deal with the value unknown.
+
+* and: The result of true and unknown is unknown, false and unknown is false, while unknown and unknown is unknown.
+* or: The result of true or unknown is true, false or unknown is unknown, while unknown or unknown is unknown.
+* not: The result of not unknown is unknown.
 
 
+SQL uses the special keyword null in a predicate to test for a null value. Thus, to find all instructors who appear in the instructor relation with null values for salary, we write:
+```SQL
+select name
+from instructor
+where salary is null;
+```
+The predicate is not null succeeds if the value on which it is applied is not null.
+
+# Aggregate Functions
+
+Aggregate functions are functions that take a collection (a set or multiset) of values as input and return a single value. SQL offers five built-in aggregate functions:
+
+* Average: avg
+* Minimum: min
+* Maximum: max
+* Total: sum
+* Count: count
+
+The input to sum and avg must be a collection of numbers, but the other operators can operate on collections of nonnumeric data types, such as strings, as well.
+
+## Basic Aggregation
+Consider the query "Find the average salary of instructors in the Computer Science department." We write this query as follows:
+```SQL
+select avg (salary)
+from instructor
+where dept_name= ’Comp. Sci.’;
+```
 
 
+There are cases where we must eliminate duplicates before computing an aggregate function. If we do want to eliminate duplicates, we use the keyword __distinct__ in the aggregate expression. An example arises in the query "Find the total number of instructors who teach a course in the Spring 2010 semester." In this case, an instructor counts only once, regardless of the number of course sections that the instructor teaches. The required information is contained in the relation teaches, and we write this query as follows:
+```SQL
+select count (distinct ID )
+from teaches
+where semester = 'Spring' and year = 2010;
+```
+Because of the keyword distinct preceding ID, even if an instructor teaches more than one course, she is counted only once in the result.
+
+## Aggregation with Grouping
+There are circumstances where we would like to apply the aggregate function not only to a single set of tuples, but also to a group of sets of tuples; we specify this wish in SQL using the group by clause. The attribute or attributes given in the group by clause are used to form groups. Tuples with the same value on all attributes in the group by clause are placed in one group. As an illustration, consider the query "Find the average salary in each department." We write this query as follows:
+```SQL
+select dept_name, avg (salary) as avg salary
+from instructor
+group by dept_name;
+```
+In contrast, consider the query "Find the average salary of all instructors." We write this query as follows:
+```SQL
+select avg (salary)
+from instructor;
+```
+In this case the group by clause has been omitted, so the entire relation is treated as a single group.  
+
+At times, it is useful to state a condition that applies to groups rather than to tuples. For example, we might be interested in only those departments where the average salary of the instructors is more than $42,000. This condition does not apply to a single tuple; rather, it applies to each group constructed by the group by clause. To express such a query, we use the having clause of SQL. SQL applies predicates in the having clause after groups have been formed, so aggregate functions may be used. We express this query in SQL as follows:
+```SQL
+
+select dept_name, avg (salary) as avg_salary
+from instructor
+group by dept_name
+having avg (salary) > 42000;
+```
+To illustrate the use of both a having clause and a where clause in the same query, we consider the query "For each course section offered in 2009, find the average total credits (tot cred) of all students enrolled in the section, if the section had at least 2 students."
+```SQL
+select course id, semester, year, sec_id, avg (tot cred)
+from takes natural join student
+where year = 2009
+group by course id, semester, year, sec_id
+having count (ID) >= 2;
+```
+## Aggregation with Null and Boolean Values
+
+In general, aggregate functions treat nulls according to the following rule: All aggregate functions except count (\*) ignore null values in their input collection. As a result of null values being ignored, the collection of values may be empty. The count of an empty collection is defined to be 0, and all other aggregate operations return a value of null when applied on an empty collection.
+
+# Nested Subqueries
+## Set Membetship
+
+SQL allows testing tuples for membership in a relation. The __in__ connective tests for set membership, where the set is a collection of values produced by a select clause. The __not in__ connective tests for the absence of set membership.  
+
+As an illustration, reconsider the query "Find all the courses taught in the both the Fall 2009 and Spring 2010 semesters."
+We begin by finding all courses taught in Spring 2010, and we write the subquery
+```SQL
+(select course_id
+from section
+where semester = 'Spring' and year= 2010)
+```
+We then need to find those courses that were taught in the Fall 2009 and that appear in the set of courses obtained in the subquery. We do so by nesting the subquery in the where clause of an outer query. The resulting query is
+```SQL
+select distinct course_id
+from section
+where semester = 'Fall' and year= 2009 and
+course_id in (select course_id
+from section
+where semester = 'Spring' and year= 2010);
+```
+
+We use the not in construct in a way similar to the in construct.
+
+The in and not in operators can also be used on enumerated sets. The following query selects the names of instructors whose names are neither "Mozart" nor "Einstein".
+```SQL
+select distinct name
+from instructor
+where name not in ('Mozart', 'Einstein');
+```
+## Set Comparison
+As an example of the ability of a nested subquery to compare sets, consider the query "Find the names of all instructors whose salary is greater than at least one instructor in the Biology department." In Section 3.4.1, we wrote this query as follows:
+```SQL
+select distinct T.name
+from instructor as T, instructor as S
+where T.salary > S.salary and S.dept_name = 'Biology';
+```
+SQL does, however, offer an alternative style for writing the preceding query. The phrase "greater than at least one" is represented in SQL by __> some__.
+
+```SQL
+select name
+from instructor
+where salary > some 
+(select salary
+from instructor
+where dept name = 'Biology');
+```
+
+SQL also allows < some, <= some, >= some, = some, and <> some comparisons.  
+
+As another example of set comparisons, consider the query "Find the departments that have the highest average salary." We begin by writing a query to find all average salaries, and then nest it as a subquery of a larger query that finds those departments for which the average salary is greater than or equal to all average salaries. The construct __> all__ corresponds to the phrase "greater than all."
+```SQL
+select dept_name
+from instructor
+group by dept_name
+having avg (salary) >= all 
+(select avg (salary)
+from instructor
+group by dept_name);
+```
+
+## Test for Empty Relations
+
+SQL includes a feature for testing whether a subquery has any tuples in its result. The exists construct returns the value true if the argument subquery is nonempty. Using the __exists__ construct, we can write the query "Find all courses taught in both the Fall 2009 semester and in the Spring 2010 semester" in still another way:
+```SQL
+select course_id
+from section as S
+where semester = 'Fall' and year= 2009 and
+exists (select *
+from section as T
+where semester = 'Spring' and year= 2010 and
+S.course id= T.course id);
+```
+The above query also illustrates a feature of SQL where a correlation name from an outer query (S in the above query), can be used in a subquery in the where clause. A subquery that uses a correlation name from an outer query is called a correlated subquery.
 
 
 
