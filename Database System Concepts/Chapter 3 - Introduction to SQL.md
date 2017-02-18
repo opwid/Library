@@ -176,4 +176,41 @@ where T.salary > S.salary and S.dept name = 'Biology';
 Observe that we could not use the notation instructor.salary, since it would not be clear which reference to instructor is intended.
 
 ## String Operations
-SQL specifies strings by enclosing them in single quotes, for example, 'Computer'. A single quote character that is part of a string can be specified by using two single quote characters; for example, the string 'It's right' can be specified by 'It''s right'. Another way is using single quote character inside double quotes; for examle, "It's right".
+SQL specifies strings by enclosing them in single quotes, for example, 'Computer'. A single quote character that is part of a string can be specified by using two single quote characters; for example, the string 'It's right' can be specified by 'It''s right'. Another way is using single quote character inside double quotes; for examle, "It's right".  
+
+SQL also permits a variety of functions on character strings, such as concatenating (using "||"), extracting substrings, finding the length of strings, converting strings to uppercase (using the function upper(s) where s is a string) and lowercase (using the function lower(s)), removing spaces at the end of the string (using trim(s)) and so on.
+```SQL
+select concat("Departmant name:", DEPT_NAME) from department;
++---------------------------------------+
+| concat("Departmant name:", DEPT_NAME) |
++---------------------------------------+
+| Departmant name:CE                    |
+| Departmant name:EE                    |
+| Departmant name:History               |
+| Departmant name:MAVA                  |
++---------------------------------------+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
