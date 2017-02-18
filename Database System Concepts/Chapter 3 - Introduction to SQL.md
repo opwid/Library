@@ -458,7 +458,7 @@ where T.course id= R.course_id and
 R.year = 2009);
 ```
 
-We can test for the existence of duplicate tuples in a subquery by using the __not unique___ construct.
+We can test for the existence of duplicate tuples in a subquery by using the __not unique__ construct.
 
 ## Subqueries in the From Clause
 
