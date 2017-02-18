@@ -443,16 +443,110 @@ from section as T
 where semester = 'Spring' and year= 2010 and
 S.course id= T.course id);
 ```
-The above query also illustrates a feature of SQL where a correlation name from an outer query (S in the above query), can be used in a subquery in the where clause. A subquery that uses a correlation name from an outer query is called a correlated subquery.
+The above query also illustrates a feature of SQL where a correlation name from an outer query (S in the above query), can be used in a subquery in the where clause. A subquery that uses a correlation name from an outer query is called a correlated subquery.  
 
 
+We can test for the nonexistence of tuples in a subquery by using the __not exists__ construct.
+## Test for the Absence of Duplicate Tuples
+SQL includes a boolean function for testing whether a subquery has duplicate tuples in its result. The unique construct returns the value true if the argument subquery contains no duplicate tuples. Using the unique construct, we can write the query "Find all courses that were offered at most once in 2009" as follows:
+```SQL
+select T.course_id
+from course as T
+where unique (select R.course_id
+from section as R
+where T.course id= R.course_id and
+R.year = 2009);
+```
+
+We can test for the existence of duplicate tuples in a subquery by using the __not unique___ construct.
+
+## Subqueries in the From Clause
+
+Consider the query "Find the average instructors' salaries of those departments where the average salary is greater than $42,000." We wrote this query in by using the having clause. We can now rewrite this query, without using the having clause, by using a subquery in the from clause, as follows:
+```SQL
+select dept_name, avg salary
+from (select dept_name, avg (salary) as avg_salary
+from instructor
+group by dept_name)
+where avg_salary > 42000;
+```
+## The with Clause
+The with clause provides a way of defining a temporary relation whose definition is available only to the query in which the with clause occurs. Consider the following query, which finds those departments with the maximum budget.
+```SQL
+with max_budget(value) as
+(select max(budget)
+from department)
+select budget
+from department, max_budget
+where department.budget = max_budget.value;
+```
+The with clause defines the temporary relation max budget, which is used in the immediately following query.  
+
+For example, suppose we want to find all departments where the total salary is greater than the average of the total salary at all departments. We can write the query using the with clause as follows.
+```SQL
+with dept_total(dept_name, value) as
+(select dept_name, sum(salary)
+from instructor
+group by dept_name),
+dept_total avg(value) as
+(select avg(value)
+from dept_total)
+select dept_name
+from dept_total, dept_total_avg
+where dept total.value >= dept_total_avg.value;
+```
 
 
+# Modification of Database
 
+## Deletion
+We can delete only whole tuples; we cannot delete values on only particular attributes. SQL expresses a deletion by
+```SQL
+delete from r
+where P;
+```
+The where clause can be omitted, in which case all tuples in r are deleted. Note that a delete command operates on only one relation. If we want to delete tuples from several relations, we must use one delete command for each relation. The predicate in the where clause may be as complex as a select command's where clause.
 
+## Insertion
+The simplest insert statement is a request to insert one tuple.
+```SQL
+insert into course
+values ('CS-437', 'Database Systems', 'Comp. Sci.', 4);
+```
+```SQL
+insert into course (title, course id, credits, dept name)
+values ('Database Systems', 'CS-437', 4, 'Comp. Sci.');
+```
 
+More generally, we might want to insert tuples on the basis of the result of a query. Suppose that we want to make each student in the Music department who has earned more than 144 credit hours, an instructor in the Music department, with a salary of $18,000. We write:
+```SQL
+insert into instructor
+select ID, name, dept_name, 18000
+from student
+where dept_name = ’Music’ and tot_cred > 144;
+```
+## Updates
 
-
+Suppose that annual salary increases are being made, and salaries of all instructors are to be increased by 5 percent. We write:
+```SQL
+update instructor
+set salary= salary * 1.05;
+```
+If a salary increase is to be paid only to instructors with salary of less than $70,000, we can write:
+```SQL
+update instructor
+set salary = salary * 1.05
+where salary < 70000;
+```
+SQL provides a __case__ construct that we can use to perform both the updates with a single update statement, avoiding the problem with the order of updates.
+```SQL
+update instructor
+set salary = 
+case
+when salary <= 100000 then salary * 1.05
+else salary * 1.03
+end
+```
 
 
 
