@@ -184,6 +184,18 @@ public class OverridingTest {
 
 In dynamic method dispatch the object can call the overriding methods of subclass and all the non-overridden methods of superclass but it cannot call the methods which are newly declared in the subclass. In the above example the object var1 was able to call the print()(overriding method) and printSuper()(non-overridden method of superclass). However if you try to call the printSub() method (which has been newly declared in SubClass class) [var1.printSub()] then it would give compilation error.
 
+# Interfaces and Abstract Classes
+## Interfaces
+Interface looks like class but it is not a class. An interface can have methods and variables just like the class but the methods declared in interface are by default abstract (only method signature, no body). Also, the variables declared in an interface are public, static & final by default. Interfaces do not have constructors and they cannot be directly instantiated.  
+
+Since methods in interfaces do not have body, they have to be implemented by the class before you can access them. The class that implements interface must implement __all__ the methods of that interface. Also, java programming language does not support multiple inheritance, using interfaces we can achieve this as a class can implement more than one interfaces, however it cannot extend more than one classes.  
+
+__Note__: Class implements interface but an interface can not implement another interface. It has to extend the other interface if required. 
+
+## Abstract Classes
+
+A class that is declared using "abstract" keyword is known as abstract class. Like an interface, an abstract class may define signatures for one or more methods without providing an implementation of those method bodies; such methods are known as abstract methods. However, unlike an interface, an abstract class may define one or more fields and any number of methods with implementation (so-called concrete methods). An abstract class may also extend another class and be extended by further subclasses. An abstract class can not be instantiated (you are not allowed to create object of Abstract class). A subclass of an abstract class must provide an implementation for the abstract methods of its superclass, or else remain abstract.
+
 
 
 
