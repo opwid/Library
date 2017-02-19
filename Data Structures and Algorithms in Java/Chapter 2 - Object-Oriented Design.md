@@ -59,6 +59,8 @@ __Rules of method overriding in Java__
 * Access Modifier: The Access Modifier of the overriding method (method of subclass) cannot be more restrictive than the overridden method of superclass. 
 * private, static and final methods cannot be overridden as they are local to the class. However static methods can be re-declared in the sub class, in this case the sub-class method would act differently and will have nothing to do with the same static method of parent class.
 * If a class is extending an abstract class or implementing an interface then it has to override all the abstract methods unless the class itself is a abstract class.
+* Overriding method can have different return type (https://stackoverflow.com/questions/14694852/can-overridden-methods-differ-in-return-type)
+
 
 __Super keyword in Overriding__  
 
@@ -94,3 +96,86 @@ public class OverridingTest {
 }
 
 ```
+# Polymorphism and Dynamic Dispatch
+
+Polymorphism is the capability of a method to do different things based on the object that it is acting upon. In other words, polymorphism allows you define one interface and have multiple implementations.
+* It is a  feature that allows one interface to be used for a general class of  actions.
+* An operation may exhibit different behavior in different instances.
+* The behavior depends on the types of data used in the operation.
+* It plays an important role in allowing objects having different internal structures to share the same external interface.
+* Polymorphism is extensively used in implementing inheritance.
+
+Following concepts demonstrate different types of polymorphism in Java:
+* Method overriding
+* Method overloading
+
+## Method Overloading  
+
+In Java, it is possible to define two or more methods of same name in a class, provided that there argument list or parameters are different. This concept is known as Method Overloading.  
+
+__Rules for Method Overloading__  
+
+* Overloading can take place in the same class or in its sub-class.
+* Constructor in Java can be overloaded
+* Overloaded methods must have a different argument list.
+* The parameters may differ in their type or number, or in both.
+* They may have the same or different return types.
+
+```JAVA
+//OverloadClass.java
+public class OverloadClass{
+	public String print(String s){
+		System.out.println(s);
+		return "Done";
+	}
+	public int print (int i){
+		System.out.println(i);
+		return 0;
+	}
+}
+
+//OverridingTest.java 
+public class OverloadTest {
+	public static void main(String[] args) {
+		OverloadClass var1 = new OverloadClass();
+		var1.print(12); //12
+		var1.print("String"); // String
+	}
+}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
