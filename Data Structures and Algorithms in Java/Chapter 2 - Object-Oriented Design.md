@@ -50,52 +50,7 @@ public class ClassTest {
 }
 
 ```
-## Method Overriding
-Declaring a method in subclass which is already present in parent class is known as method overriding. The main advantage of method overriding is that the class can give its own specific implementation to a inherited method without even modifying the superclass.  
 
-__Rules of method overriding in Java__
-
-* Argument list: The argument list of overriding method must be same as that of the method in superclass. The data types of the arguments and their sequence should be maintained as it is in the overriding method.
-* Access Modifier: The Access Modifier of the overriding method (method of subclass) cannot be more restrictive than the overridden method of superclass. 
-* private, static and final methods cannot be overridden as they are local to the class. However static methods can be re-declared in the sub class, in this case the sub-class method would act differently and will have nothing to do with the same static method of parent class.
-* If a class is extending an abstract class or implementing an interface then it has to override all the abstract methods unless the class itself is a abstract class.
-* Overriding method can have different return type (https://stackoverflow.com/questions/14694852/can-overridden-methods-differ-in-return-type)
-
-
-__Super keyword in Overriding__  
-
-super keyword is used for calling the parent class method/constructor. super.methodname() calling the specified method of base class while super() calls the constructor of base class.
-
-```JAVA
-/*
-Method overriding and super keyword example
-*/
-
-//SuperClass.java
-public class SuperClass {
-	public void print(){
-		System.out.println("SuperClass: print()");
-	}
-}
-
-//SubClass.java
-public class SubClass extends SuperClass{
-	public void print(){
-		System.out.println("SubClass: print()");
-		super.print();
-	}
-}
-
-
-//OverridingTest.java 
-public class OverridingTest {
-	public static void main(String[] args) {
-		SubClass var1 = new SubClass();
-		var1.print();
-	}
-}
-
-```
 # Polymorphism and Dynamic Dispatch
 
 Polymorphism is the capability of a method to do different things based on the object that it is acting upon. In other words, polymorphism allows you define one interface and have multiple implementations.
@@ -144,9 +99,90 @@ public class OverloadTest {
 }
 ```
 
+## Method Overriding
+Declaring a method in subclass which is already present in parent class is known as method overriding. The main advantage of method overriding is that the class can give its own specific implementation to a inherited method without even modifying the superclass.  
+
+__Rules of method overriding in Java__
+
+* Argument list: The argument list of overriding method must be same as that of the method in superclass. The data types of the arguments and their sequence should be maintained as it is in the overriding method.
+* Access Modifier: The Access Modifier of the overriding method (method of subclass) cannot be more restrictive than the overridden method of superclass. 
+* private, static and final methods cannot be overridden as they are local to the class. However static methods can be re-declared in the sub class, in this case the sub-class method would act differently and will have nothing to do with the same static method of parent class.
+* If a class is extending an abstract class or implementing an interface then it has to override all the abstract methods unless the class itself is a abstract class.
+* Overriding method can have different return type (https://stackoverflow.com/questions/14694852/can-overridden-methods-differ-in-return-type)
 
 
+__Super keyword in Overriding__  
 
+super keyword is used for calling the parent class method/constructor. super.methodname() calling the specified method of base class while super() calls the constructor of base class.
+
+```JAVA
+/*
+Method overriding and super keyword example
+*/
+
+//SuperClass.java
+public class SuperClass {
+	public void print(){
+		System.out.println("SuperClass: print()");
+	}
+}
+
+//SubClass.java
+public class SubClass extends SuperClass{
+	public void print(){
+		System.out.println("SubClass: print()");
+		super.print();
+	}
+}
+
+
+//OverridingTest.java 
+public class OverridingTest {
+	public static void main(String[] args) {
+		SubClass var1 = new SubClass();
+		var1.print();
+	}
+}
+
+```
+
+__Method Overriding in dynamic method dispatch__  
+
+Dynamic method dispatch is a technique which enables us to assign the superclass reference to a subclass object. As you can see in the below example that the superclass reference is assigned to baseclass object.
+```JAVA
+//SuperClass.java
+public class SuperClass {
+	public void print(){
+		System.out.println("SuperClass: print()");
+	}
+	public void printSuper(){
+		System.out.println("SuperClass: printSuper()");
+	}
+}
+
+//SubClass.java
+public class SubClass extends SuperClass{
+	public void print(){
+		System.out.println("SubClass: print()");
+	}
+	public void printSub(){
+		System.out.println("SubClass: printSub()");
+	}
+}
+
+//OverridingTest.java
+public class OverridingTest {
+	public static void main(String[] args) {
+		SuperClass var1 = new SubClass();
+		var1.printSuper(); // SuperClass: printSuper()
+		var1.print(); // SubClass: print()
+		var1.printSub(); // Exception in thread "main" java.lang.Error: Unresolved compilation problem: The method printSub() is undefined for the type SuperClass
+	}
+}
+
+```
+
+In dynamic method dispatch the object can call the overriding methods of subclass and all the non-overridden methods of superclass but it cannot call the methods which are newly declared in the subclass. In the above example the object var1 was able to call the print()(overriding method) and printSuper()(non-overridden method of superclass). However if you try to call the printSub() method (which has been newly declared in SubClass class) [var1.printSub()] then it would give compilation error.
 
 
 
