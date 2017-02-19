@@ -196,6 +196,10 @@ __Note__: Class implements interface but an interface can not implement another 
 
 A class that is declared using "abstract" keyword is known as abstract class. Like an interface, an abstract class may define signatures for one or more methods without providing an implementation of those method bodies; such methods are known as abstract methods. However, unlike an interface, an abstract class may define one or more fields and any number of methods with implementation (so-called concrete methods). An abstract class may also extend another class and be extended by further subclasses. An abstract class can not be instantiated (you are not allowed to create object of Abstract class). A subclass of an abstract class must provide an implementation for the abstract methods of its superclass, or else remain abstract.
 
+# Nested Classes
+
+Java allows a class definition to be nested inside the definition of another class. The main use for nesting classes is when defining a class that is strongly affiliated with another class. This can help increase encapsulation and reduce undesired name conflicts. Nested classes are a valuable technique when implementing data structures, as an instance of a nested use can be used to represent a small portion of a larger data structure, or an auxiliary class that helps navigate a primary data structure.
+
 
 
 
