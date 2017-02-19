@@ -14,6 +14,7 @@ void main(){
 ```C
 #include <stdio.h>
 #include <stdlib.h>
+
 int success(){
 	return EXIT_SUCCESS;
 }
