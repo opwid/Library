@@ -22,7 +22,7 @@ void main(){
 	printf("LLONG_MIN: %lld, LLONG_MAX: %lld\n", LLONG_MIN, LLONG_MAX);
 
 	printf("UCHAR_MIN: 0, UCHAR_MAX: %u\n", UCHAR_MAX);
-	printf("USHORT_MIN: 0, USHORT_MAX: %u\n", USHRT_MAX);
+	printf("USHORT_MIN: 0, USHORT_MAX: %hu\n", USHRT_MAX);
 	printf("USHORT_MIN: 0, UINT_MAX: %u\n", UINT_MAX);
 	printf("ULONG_MIN: 0, ULONG_MAX: %lu\n", ULONG_MAX);
 	printf("ULLONG_MIN: 0, ULLONG_MAX: %llu\n", ULLONG_MAX);
