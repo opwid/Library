@@ -1,0 +1,12 @@
+The address of operator, &, produces the address in memory of its operand. You have been using the address of operator extensively with the scanf() function. You’ve been using it as a prefix to the name of the variable where the input is to be stored. This makes the address that the variable occupies available to scanf(), which allows the function to store the data that are entered from the keyboard in the variable. When you use the variable name by itself as an argument to a function, only the value stored in the variable is available to the function. Prefixing the variable name with the address of operator makes the address of the variable available to the function. This enables the function to modify the value that’s stored in the variable.
+```C
+#include <stdio.h>
+
+void main(){
+	int a;
+	scanf("%d",&a);
+
+	printf("Value of a: %d\n",a); // Value of a: 30
+	printf("Memory location of a: %p\n",&a); // Memory location of a: 0x7fffce6e5082
+}
+```
