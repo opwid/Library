@@ -1,7 +1,7 @@
 # Inheritance
 In object-oriented programming, the mechanism for a modular and hierarchical organization is a technique known as __inheritance__. This allows a new class to be defined based upon an existing class as the starting point. In object-oriented terminology, the existing class is typically described as the base class, parent class, or superclass, while the newly defined class is known as the subclass or child class. We say that the subclass extends the superclass.  
 
-In Java, each class can extend exactly one other class. Because of this property, Java is said to allow only __single inheritance__ among classes. We should also note that even if a class definition makes no explicit use of the extends clause, it automatically inherits from a class, java.lang.Object, which serves as the universal superclass in Java.
+In Java, each class can extend exactly one other class. Because of this property, Java is said to allow only __single inheritance__ among classes. We should also note that even if a class definition makes no explicit use of the extends clause, it automatically inherits from a class, java.lang.Object, which serves as the universal superclass in Java. Although a subclass may not inherit from multiple superclasses in Java, a superclass may have many subclasses.
 
 When inheritance is used, the subclass automatically inherits, as its starting point, __all methods from the superclass__ (other than __constructors__). The subclass can differentiate itself from its superclass in two ways. It may augment the superclass by adding new fields and new methods. It may also specialize existing behaviors by providing a new implementation that __overrides__ an existing method.  
 
