@@ -71,7 +71,6 @@ Method overriding and super keyword example
 
 //SuperClass.java
 public class SuperClass {
-	
 	public void print(){
 		System.out.println("SuperClass: print()");
 	}
@@ -79,7 +78,6 @@ public class SuperClass {
 
 //SubClass.java
 public class SubClass extends SuperClass{
-
 	public void print(){
 		System.out.println("SubClass: print()");
 		super.print();
@@ -89,9 +87,7 @@ public class SubClass extends SuperClass{
 
 //OverridingTest.java 
 public class OverridingTest {
-
 	public static void main(String[] args) {
-		
 		SubClass var1 = new SubClass();
 		var1.print();
 	}
