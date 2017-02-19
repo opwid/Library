@@ -10,3 +10,19 @@ void main(){
 	
 }
 ```
+
+```C
+#include <stdio.h>
+#include <stdlib.h>
+int success(){
+	return EXIT_SUCCESS;
+}
+
+void main(){
+
+	if(success()){
+		printf("Successful\n"); // This never prints because success() returns 0
+	}
+
+}
+```
