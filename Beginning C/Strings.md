@@ -31,3 +31,17 @@ void main(){
 	
 }
 ```
+```C
+#include <stdio.h>
+#include <string.h>
+/*
+Scanf automatically adds null character at the end
+*/
+void main(){
+	char string1[100];
+	scanf("%99s",string1); // Hello
+	
+	printf("%zu\n",strlen(string1)); // 5
+	
+}
+```
