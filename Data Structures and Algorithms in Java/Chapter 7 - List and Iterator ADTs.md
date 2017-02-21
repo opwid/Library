@@ -1,7 +1,7 @@
 # The List ADT
 In this chapter, we explore several abstract data types that represent a linear sequence of elements, but with more general support for adding or removing elements at arbitrary positions. However, designing a single abstraction that is well suited for efficient implementation with either an array or a linked list is challenging, given the very different nature of these two fundamental data structures.  
 
-| Method     	 Description                                                                                                                                                                      	|
+| Method     	| Description                                                                                                                                                                      	|
 |------------	|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------	|
 | size():    	| Returns the number of elements in the list.                                                                                                                                      	|
 | isEmpty(): 	| Returns a boolean indicating whether the list is empty.                                                                                                                          	|
