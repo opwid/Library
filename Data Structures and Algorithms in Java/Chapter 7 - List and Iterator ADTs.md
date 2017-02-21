@@ -198,4 +198,11 @@ public class ArrayList<E> implements List<E> {
 }
 
 ```
-
+| Method     | Worst-case Running Time |
+|------------|-------------------------|
+| size():    | O(1)                    |
+| isEmpty(): | O(1)                    |
+| get(i):    | O(1)                    |
+| set(i,e):  | O(1)                    |
+| add(i,e):  | O(n)                    |
+| remove(i): | O(n)                    |
