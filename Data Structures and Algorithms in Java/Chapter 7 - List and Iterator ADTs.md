@@ -9,3 +9,9 @@ In this chapter, we explore several abstract data types that represent a linear 
 | set(i,e):  	| Replaces the element at index i with e, and returns the old element that was replaced; an error condition occurs if i is not in range[0, size( )−1].                             	|
 | add(i,e):  	| Inserts a new element e into the list so that it has index i, moving all subsequent elements one index later in the list; an error condition occurs if i is not in range[0,size] 	|
 | remove(i): 	| Removes and returns the element at index i, moving all subsequent elements one index earlier in the list; an error condition occurs if i is not in range [0,size()-1]            	|
+
+
+
+# Array Lists
+
+An obvious choice for implementing the list ADT is to use an array A, where A[i] stores (a reference to) the element with index i.
