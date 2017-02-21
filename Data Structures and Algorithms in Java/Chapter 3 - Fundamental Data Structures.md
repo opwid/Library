@@ -40,3 +40,56 @@ public class Program {
 */
 
 ```
+
+# java.util Methods for Arrays
+## fill(A,x)
+```JAVA
+import java.util.Arrays;
+public class Program {
+	public static void main(String[] args) {
+		
+		int[] arr = new int[10];
+		Arrays.fill(arr, 12);
+		for (int i = 0; i < arr.length; i++) {
+			System.out.print(arr[i] + " ");
+		}
+	}
+}
+
+/*
+12 12 12 12 12 12 12 12 12 12
+*/
+```
+## toString(A)
+```JAVA
+import java.util.Arrays;
+public class Program {
+	public static void main(String[] args) {
+		
+		int[] arr = new int[10];
+		Arrays.fill(arr, 12);
+		System.out.println(Arrays.toString(arr));
+	}
+}
+
+/*
+[12, 12, 12, 12, 12, 12, 12, 12, 12, 12]
+*/
+```
+## sort(A)
+```
+import java.util.Arrays;
+public class Program {
+	public static void main(String[] args) {
+
+		int[] arr = {12,1,2,6,7,23,56,3,546,23,6,45,62};
+		Arrays.sort(arr);
+		System.out.println(Arrays.toString(arr));
+		
+	}
+}
+
+/*
+[1, 2, 3, 6, 6, 7, 12, 23, 23, 45, 56, 62, 546]
+*/
+```
