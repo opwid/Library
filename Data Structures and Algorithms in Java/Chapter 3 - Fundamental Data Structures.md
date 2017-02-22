@@ -105,16 +105,127 @@ An important property of a linked list is that it does not have a predetermined 
 
 Removing an element from the head of a singly linked list is essentially the reverse operation of inserting a new element at the head. Unfortunately, we cannot easily delete the last node of a singly linked list. Even if we maintain a tail reference directly to the last node of the list, we must be able to access the node before the last node in order to remove the last node. But we cannot reach the node before the tail by following next links from the tail. The only way to access this node is to start from the head of the list and search all the way through the list. But such a sequence of link-hopping operations could take a long time. If we want to support such an operation efficiently, we will need to make our list doubly linked.  
 
-| Method | Description |
-|--------|-------------|
-|  size()      |             |
-|        |             |
-|        |             |
-|        |             |
-|        |             |
-|        |             |
-|        |             |
+| Method        | Description                                                  |
+|---------------|--------------------------------------------------------------|
+| size()        | Returns the number of elements in the list.                  |
+| isEmpty()     | Returns true if the list is empty, and false otherwise.      |
+| first()       | Returns (but does not remove) the first element in the list. |
+| last()        | Returns (but does not remove) the last element in the list.  |
+| addFirst(e)   | Adds a new element to the front of the list.                 |
+| addLast(e)    | Adds a new element to the end of the list.                   |
+| removeFirst() | Removes and returns the first element of the list.           |
 
+
+```JAVA
+public class SinglyLinkedList<E> {
+	
+	private static class Node<E>{
+		
+		private E element;
+		private Node<E> next;
+		
+		public Node(E e, Node<E> n){
+			element = e;
+			next = n;
+			
+		}
+		public E getElement(){
+			return element;
+		}
+		
+		public Node<E> getNext(){
+			return next;
+		}
+		
+		public void setNext(Node<E> n){
+			next = n;
+		}
+	}
+	
+	private Node<E> head = null;
+	private Node<E> tail = null;
+	private int size = 0;
+	
+	public SinglyLinkedList(){
+		
+	}
+	
+	public int size(){
+		return size;
+	}
+	
+	public boolean isEmpty(){
+		return size==0;
+	}
+	
+	public E first(){
+		if(size == 0){
+			return null;
+		}
+		return head.getElement();
+	}
+	
+	public E last(){
+		if(size == 0){
+			return null;
+		}
+		return tail.getElement();
+	}
+	
+	public void addFirst(E e){
+		head = new Node<>(e, head);
+		if(size == 0){
+			tail = head; //new node becomes tail also
+		}
+		size++;
+	}
+	
+	public void addLast(E e){
+		Node<E> newest = new Node<E>(e,null);
+		if(size==0){
+			head = newest;
+		}else{
+			tail.setNext(newest);
+		}
+		
+		tail = newest;
+		size++;
+		
+	}
+	
+	public E removeFirst(){
+		if(size == 0){
+			return null;
+		}
+		E temp = head.getElement();
+		head = head.getNext();
+		size--;
+		if(size == 0){
+			tail = null;
+		}
+		return temp;
+	}
+	/*
+	Singly list normally does not implement removeLast(). Time complexity: O(n)
+	*/
+	
+	public E removeLast(){
+		if(size == 0){
+			return null;
+		}
+		E temp = tail.getElement();
+		Node<E> tempNode = new Node<E>(null,head);
+		for(int i = 0; i<size-1; i++){
+			tempNode = tempNode.next;
+		}
+		tail = tempNode;
+		size--;
+		
+		return temp;		
+	}
+ 
+}
+```
 
 
 
