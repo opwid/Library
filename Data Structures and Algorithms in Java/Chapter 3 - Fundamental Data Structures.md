@@ -206,7 +206,7 @@ public class SinglyLinkedList<E> {
 		return temp;
 	}
 	/*
-	Singly list normally does not implement removeLast(). Time complexity: O(n)
+	Singly linked list normally does not implement removeLast(). Time complexity: O(n)
 	*/
 	
 	public E removeLast(){
