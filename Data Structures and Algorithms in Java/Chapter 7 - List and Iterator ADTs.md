@@ -206,3 +206,39 @@ public class ArrayList<E> implements List<E> {
 | set(i,e):  | O(1)                    |
 | add(i,e):  | O(n)                    |
 | remove(i): | O(n)                    |
+
+
+## Implementing a Dynamic Array
+```JAVA
+protected void resize(int CAPACITY){
+		E[]temp = (E[]) new Object[CAPACITY];
+		for (int i = 0; i < size; i++) {
+			temp[i] = data[i];
+		}
+
+		data = temp;
+	}
+```
+How large should the new array be?
+
+* Incremental strategy: increase the size by a constant c
+* Doubling strategy: double the size
+
+We compare them by analyzing the total time T(n) needed to perform a series of n add(o) operations. We assume that we start with an empty stack represented by an array of size 1. We call __amortized time__ of an add operation the average time taken by an add over the series of operations, i.e., T(n)/n. The amortized time of an add operation in __incremental strategy__ is __O(n)__. The amortized time of an add operation in __doubling strategy__ is __O(1)__.
+
+
+```JAVA
+	public void add(int index, E element) throws IndexOutOfBoundsException{
+		// TODO Auto-generated method stub
+		checkIndex(index, size + 1);
+		if(size == data.length){
+			resize(size* 2);            
+		}
+
+		for (int k = size-1; k >= index; k--) {
+			data[k+1] = data[k];
+		}
+		data[index] = element;
+		size++;
+	}
+```
