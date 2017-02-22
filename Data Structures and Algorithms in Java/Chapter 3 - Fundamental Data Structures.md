@@ -93,3 +93,71 @@ public class Program {
 [1, 2, 3, 6, 6, 7, 12, 23, 23, 45, 56, 62, 546]
 */
 ```
+# Singly Linked List
+
+Arrays are great for storing things in a certain order, but they have drawbacks. The capacity of the array must be fixed when it is created, and insertions and deletions at interior positions of an array can be time consuming if many elements must be shifted.  
+
+In this section, we introduce a data structure known as a linked list, which provides an alternative to an array-based structure. A linked list, in its simplest form, is a collection of nodes that collectively form a linear sequence. In a singly linked list, each node stores a reference to an object that is an element of the sequence, as well as a reference to the next node of the list.  
+
+The linked list instance must keep a reference to the first node of the list, known as the __head__. The last node of the list is known as the __tail__. We can identify the tail as the node having null as its next reference.  
+
+An important property of a linked list is that it does not have a predetermined fixed size; it uses space proportional to its current number of elements. When using a singly linked list, we can easily insert an element at the head of the list. The main idea is that we create a new node, set its element to the new element, set its next link to refer to the current head, and set the list's head to point to the new node. We can also easily insert an element at the tail of the list, provided we keep a reference to the tail node. In this case, we create a new node, assign its next reference to null, set the next reference of the tail to point to this new node, and then update the tail reference itself to this new node.  
+
+Removing an element from the head of a singly linked list is essentially the reverse operation of inserting a new element at the head. Unfortunately, we cannot easily delete the last node of a singly linked list. Even if we maintain a tail reference directly to the last node of the list, we must be able to access the node before the last node in order to remove the last node. But we cannot reach the node before the tail by following next links from the tail. The only way to access this node is to start from the head of the list and search all the way through the list. But such a sequence of link-hopping operations could take a long time. If we want to support such an operation efficiently, we will need to make our list doubly linked.  
+
+| Method | Description |
+|--------|-------------|
+|  size()      |             |
+|        |             |
+|        |             |
+|        |             |
+|        |             |
+|        |             |
+|        |             |
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
