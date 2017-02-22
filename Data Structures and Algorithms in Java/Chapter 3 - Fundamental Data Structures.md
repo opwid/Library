@@ -226,6 +226,108 @@ public class SinglyLinkedList<E> {
  
 }
 ```
+# Circularly Linked List
+
+In this section, we design a structure known as a circularly linked list, which is essentially a singularly linked list in which the next reference of the tail node is set to refer back to the head of the list (rather than null).  
+
+CircularlyLinkedList class supports all of the public behaviors of our SinglyLinkedList class and one additional update method:
+
+| Method        | Description                                                  |
+|---------------|--------------------------------------------------------------|
+| rotate()     | Moves the first element to the end of the list.              |
+
+We no longer explicitly maintain the head reference. So long as we maintain a reference to the tail, we can locate the head as tail.getNext(). Implementing the new rotate method is quite trivial. We do not move any nodes or elements, we simply advance the tail reference to point to the node that follows it (the implicit head of the list).  
+
+We can add a new element at the front of the list by creating a new node and linking it just after the tail of the list. To implement the addLast method, we can rely on the use of a call to addFirst and then immediately advance the tail reference so that the newest node becomes the last. Removing the first node from a circularly linked list can be accomplished by simply updating the next field of the tail node to bypass the implicit head.
+```JAVA
+
+public class CircularlyLinkedList<E> {
+
+	private static class Node<E>{
+		
+		private E element;
+		private Node<E> next;
+		
+		public Node(E e, Node<E> n){
+			element = e;
+			next = n;
+			
+		}
+		public E getElement(){
+			return element;
+		}
+		
+		public Node<E> getNext(){
+			return next;
+		}
+		
+		public void setNext(Node<E> n){
+			next = n;
+		}
+	}
+	
+	private Node<E> tail = null;
+	private int size = 0;
+	public CircularlyLinkedList(){
+		
+	}
+	public int size(){
+		return size;
+	}
+	public boolean isEmpty(){
+		return size == 0;
+	}
+	public E first(){
+		if(isEmpty()){
+			return null;
+		}
+		
+		return tail.getNext().getElement();
+	}
+	public E last(){
+		if(isEmpty()){
+			return null;
+		}
+		
+		return tail.getElement();
+	}
+	
+	public void rotate(){
+		if(tail != null){
+			tail = tail.getNext();
+		}
+	}
+	public void addFirst(E e){
+		if(size == 0){
+			tail = new Node<>(e,null);
+			tail.setNext(tail);
+		}else{
+			Node<E> newest = new Node<E>(e,tail.getNext());
+			tail.setNext(newest);
+		}
+		size++;
+	}
+	public void addLast(E e){
+		addFirst(e);
+		tail = tail.getNext();
+	}
+	public E removeFirst(){
+		if(isEmpty()){
+			return null;
+		}
+		Node<E> head = new Node<E>(null,tail.getNext());
+		if(head == tail){
+			tail = null;
+		}else{
+			tail.setNext(head.getNext());	
+		}
+		size--;
+		return head.getElement();
+		
+	}
+}
+
+```
 
 
 
