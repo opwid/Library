@@ -326,6 +326,110 @@ public class CircularlyLinkedList<E> {
 		
 	}
 }
+```
+
+# Doubly Linked List 
+To provide greater symmetry, we define a linked list in which each node keeps an explicit reference to the node before it and a reference to the node after it. Such a structure is known as a doubly linked list. These lists allow a greater variety of O(1)-time update operations, including insertions and deletions at arbitrary positions within the list. We continue to use the term "next" for the reference to the node that follows another, and we introduce the term "prev" for the reference to the node that precedes it.  
+
+| Method        | Description                                                  |
+|---------------|--------------------------------------------------------------|
+| size()        | Returns the number of elements in the list.                  |
+| isEmpty()     | Returns true if the list is empty, and false otherwise.      |
+| first()       | Returns (but does not remove) the first element in the list. |
+| last()        | Returns (but does not remove) the last element in the list.  |
+| addFirst(e)   | Adds a new element to the front of the list.                 |
+| addLast(e)    | Adds a new element to the end of the list.                   |
+| removeFirst() | Removes and returns the first element of the list.           |
+| removeLast()  | Removes and returns the last element of the list.            |
+
+```JAVA
+
+public class DoublyLinkedList<E> {
+
+	private static class Node<E>{
+		private E element;
+		private Node<E> prev;
+		private Node<E> next;
+
+		public Node(E e, Node<E> p, Node<E> n){
+			element = e;
+			prev = p;
+			next = n;
+		}
+		public E getElement(){
+			return element;	
+		}
+		public Node<E> getPrev(){
+			return prev;
+		}
+		public Node<E> getNext(){
+			return next;
+		}
+		public void setPrev(Node<E> p){
+			prev = p;
+		}
+		public void setNext(Node<E> n){
+			next = n;
+		}
+	}
+	private Node<E> header;
+	private Node<E> trailer;
+	private int size = 0;
+
+	public DoublyLinkedList(){
+		header = new Node<>(null, null, null);
+		trailer = new Node<>(null, header, null);
+		header.setNext(trailer);
+
+	}
+	public int size(){
+		return size;
+	}
+	public boolean isEmpty(){
+		return size == 0;
+	}
+	public E first(){
+		if(isEmpty()){
+			return null;
+		}
+		return header.getNext().getElement();
+	}
+	public E last(){
+		if(isEmpty()){
+			return null;
+		}
+		return trailer.getPrev().getElement();
+	}
+	public void addFirst(E e){
+		addBetween(e, header, header.getNext());
+	}
+	public void addLast(E e){
+		addBetween(e, trailer.getPrev(), trailer);
+	}
+	public E removeFirst( ) {
+		if (isEmpty( )) return null;
+		return remove(header.getNext( ));
+	}
+	public E removeLast( ) {
+		if (isEmpty( )) return null;
+		return remove(trailer.getPrev( ));
+	}
+	private void addBetween(E e, Node<E> predecessor, Node<E> successor) {
+		Node<E> newest = new Node<>(e, predecessor, successor);
+		predecessor.setNext(newest);
+		successor.setPrev(newest);
+		size++;
+	}
+	private E remove(Node<E> node) {
+		Node<E> predecessor = node.getPrev( );
+		Node<E> successor = node.getNext( );
+		predecessor.setNext(successor);
+		successor.setPrev(predecessor);
+		size--;
+		return node.getElement( );
+	}
+
+}
 
 ```
 
