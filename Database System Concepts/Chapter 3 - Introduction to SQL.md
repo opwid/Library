@@ -67,7 +67,7 @@ SQL allows us to use the keyword __all__ to specify explicitly that duplicates a
 
 The __select__ clause may also contain arithmetic expressions involving the operators +, −, *, and / operating on constants or attributes of tuples. For example, the query: 
 ```SQL
-select ID , name, dept name, salary * 1.1
+select ID , name, dept_name, salary * 1.1
 from instructor;
 ```
 returns a relation that is the same as the instructor relation, except that the attribute salary is multiplied by 1.1.  
@@ -171,7 +171,7 @@ Another reason to rename a relation is a case where we wish to compare tuples in
 ```SQL
 select distinct T.name
 from instructor as T, instructor as S
-where T.salary > S.salary and S.dept name = 'Biology';
+where T.salary > S.salary and S.dept_name = 'Biology';
 ```
 Observe that we could not use the notation instructor.salary, since it would not be clear which reference to instructor is intended.
 
@@ -415,7 +415,7 @@ from instructor
 where salary > some 
 (select salary
 from instructor
-where dept name = 'Biology');
+where deptname = 'Biology');
 ```
 
 SQL also allows < some, <= some, >= some, = some, and <> some comparisons.  
@@ -514,7 +514,7 @@ insert into course
 values ('CS-437', 'Database Systems', 'Comp. Sci.', 4);
 ```
 ```SQL
-insert into course (title, course id, credits, dept name)
+insert into course (title, course id, credits, dept_name)
 values ('Database Systems', 'CS-437', 4, 'Comp. Sci.');
 ```
 
