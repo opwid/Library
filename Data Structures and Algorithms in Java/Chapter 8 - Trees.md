@@ -24,3 +24,31 @@ We define a tree ADT using the concept of a __position__ as an abstraction for a
 | position():     | Returns an iterable collection of all positions of the tree.                           |
 
 
+## Computing Depth and Height
+Let p be a position within tree T. The depth of p is the number of ancestors of p, other than p itself. Note that this definition implies that the depth of the root of T is 0. The depth of p can also be recursively defined as follows: 
+
+* If p is the root, then the depth of p is 0.
+* Otherwise, the depth of p is one plus the depth of the parent of p.
+
+```JAVA
+public int depth(Position<E> p) {
+	if (isRoot(p))
+		return 0;
+	else
+		return 1 + depth(parent(p));
+}
+```
+
+We next define the __height__ of a tree to be equal to the maximum of the depths of its positions (or zero, if the tree is empty). Formally, we define the height of a position p in a tree T as follows:
+* If p is a leaf, then the height of p is 0.
+* Otherwise, the height of p is one more than the maximum of the heights of p's children.
+
+The overall height of a nonempty tree can be computed by sending the root of the tree as a parameter.
+```JAVA
+public int height(Position<E> p) {
+	int h = 0;
+	for (Position<E> c : children(p))
+		h = Math.max(h, 1 + height(c));
+	return h;
+}
+```
