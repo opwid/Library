@@ -25,7 +25,7 @@ We define a tree ADT using the concept of a __position__ as an abstraction for a
 
 
 ## Computing Depth and Height
-Let p be a position within tree T. The depth of p is the number of ancestors of p, other than p itself. Note that this definition implies that the depth of the root of T is 0. The depth of p can also be recursively defined as follows: 
+Let p be a position within tree T. The __depth__ of p is the number of ancestors of p, other than p itself. Note that this definition implies that the depth of the root of T is 0. The depth of p can also be recursively defined as follows: 
 
 * If p is the root, then the depth of p is 0.
 * Otherwise, the depth of p is one plus the depth of the parent of p.
@@ -52,3 +52,13 @@ public int height(Position<E> p) {
 	return h;
 }
 ```
+## Binary Trees
+
+
+
+
+
+
+
+
+
