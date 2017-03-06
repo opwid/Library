@@ -7,6 +7,8 @@ We define a tree T as a set of nodes storing elements such that the nodes have a
 Two nodes that are children of the same parent are __siblings__. A node v is __external__ if v has no children. A node v is __internal__ if it has one or more children. External nodes are also known as __leaves__. A node u is an __ancestor__ of a node v if u = v or u is an ancestor of the parent of v.  
 
 We define a tree ADT using the concept of a __position__ as an abstraction for a node of a tree. An element is stored at each position, and positions satisfy parent-child relationships that define the tree structure. A position object for a tree supports the method:
+
+
 | Method          | Description                                                                            |
 |-----------------|----------------------------------------------------------------------------------------|
 | getElement():   | Returns the element stored at this position.                                           |
