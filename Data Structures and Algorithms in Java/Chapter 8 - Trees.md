@@ -53,6 +53,41 @@ public int height(Position<E> p) {
 }
 ```
 ## Binary Trees
+A binary tree is an ordered tree with the following properties: 
+
+* Every node has at most two children.
+* Each child node is labeled as being either a left child or a right child.
+* A left child precedes a right child in the order of children of a node.
+
+A binary tree is __proper__ if each node has either zero or two children.
+
+## The Binary Tree Abstract Data Type
+As an abstract data type, a binary tree is a specialization of a tree that supports three additional accessor methods:
+
+| Method      | Description                                                                     |
+|-------------|---------------------------------------------------------------------------------|
+| left(p):    | Returns the position of the left child of p (or null if p has no left child).   |
+| right(p):   | Returns the position of the right child of p (or null if p has no right child). |
+| sibling(p): | Returns the position of the sibling of p (or null if p has no sibling).         |
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
