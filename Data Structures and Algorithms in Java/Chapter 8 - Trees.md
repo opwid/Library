@@ -110,6 +110,17 @@ Algorithm preorder(p):
 	for each child c in children(p) do
 		preorder(c)
 ```
+
+```JAVA
+	public void preorder(Node n){
+		if(n != null){
+			System.out.print(n.value + " ");
+			preorder(n.left);
+			preorder(n.right);
+		}
+	}
+
+```
 ![Preorder](https://github.com/opwid/Library/blob/master/Data%20Structures%20and%20Algorithms%20in%20Java/Images/Preorder.png)
 
 ## Postorder Traversal
@@ -119,6 +130,17 @@ Algorithm postorder(p):
 	for each child c in children(p) do
 		postorder(c)
 	perform the "visit" action for position p
+```
+
+
+```JAVA
+	public void postorder(Node n){
+		if(n != null){
+			postorder(n.left);
+			postorder(n.right);
+			System.out.print(n.value + " ");
+		}
+	}
 ```
 ![Postorder](https://github.com/opwid/Library/blob/master/Data%20Structures%20and%20Algorithms%20in%20Java/Images/Postorder.png)
 
@@ -135,6 +157,31 @@ Algorithm breadthfirst( ):
 			Q.enqueue(c)
 ```
 
+
+```JAVA
+	public void breadthfirst(){
+
+		Queue<Node> q = new LinkedList<Node>();
+		if(root != null){
+			System.out.print(root.value + " ");
+			q.add(root);
+		}
+		while (!q.isEmpty()) {
+			Node u = q.remove();
+			if(u.left != null){
+				System.out.print(u.left.value + " ");
+				q.add(u.left);
+			}
+			if(u.right != null){
+				System.out.print(u.right.value + " ");
+				q.add(u.right);
+			}
+		}
+		System.out.println();
+	}
+
+```
+
 ![Breadth-First](https://github.com/opwid/Library/blob/master/Data%20Structures%20and%20Algorithms%20in%20Java/Images/Breadth-First.png)
 
 ## Inorder Traversal
@@ -149,6 +196,16 @@ Algorithm inorder(p):
 		inorder(rc)
 ```
 
+
+```JAVA
+	public void inorder(Node n){
+		if(n != null){
+			inorder(n.left);
+			System.out.print(n.value + " ");
+			inorder(n.right);
+		}
+	}
+```
 
 ![Inorder](https://github.com/opwid/Library/blob/master/Data%20Structures%20and%20Algorithms%20in%20Java/Images/Inorder.png)
 
