@@ -86,8 +86,30 @@ A natural way to realize a binary tree T is to use a linked structure, with a no
 
 
 
+We have specifically chosen this collection of operations because each can be implemented in O(1) worst-case time with our linked representation.
+
+## Array-Based Representation of a Binary Tree
+An alternative representation of a binary tree T is based on a way of numbering the positions of T. For every position p of T, let f(p) be the integer defined as follows.
+* If p is the root of T, then f(p) = 0.
+* If p is the left child of position q, then f(p) = 2f(q) + 1.
+* If p is the right child of position q, then f(p) = 2f(q) + 2.
+
+Note well that the level numbering is based on potential positions within a tree, not the actual shape of a specific tree, so they are not necessarily consecutive.  
+
+The level numbering function f suggests a representation of a binary tree T by means of an array-based structure A, with the element at position p of T stored at index f(p) of the array.  
+
+One advantage of an array-based representation of a binary tree is that a position p can be represented by the single integer f (p), and that position-based methods such as root, parent, left, and right can be implemented using simple arithmetic operations on the number f(p).
 
 
+# Tree Traversal Algorithm
+## Preorder Traversal
+In a preorder traversal of a tree T, the root of T is visited first and then the subtrees rooted at its children are traversed recursively. If the tree is ordered, then the subtrees are traversed according to the order of the children.
+```
+Algorithm preorder(p):
+	perform the "visit" action for position p
+	for each child c in children(p) do
+		preorder(c)
+```
 
 
 
