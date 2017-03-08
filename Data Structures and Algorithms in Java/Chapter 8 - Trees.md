@@ -71,6 +71,20 @@ As an abstract data type, a binary tree is a specialization of a tree that suppo
 | sibling(p): | Returns the position of the sibling of p (or null if p has no sibling).         |
 
 
+# Implementing Trees
+## Linked Structure for Binary Trees
+A natural way to realize a binary tree T is to use a linked structure, with a node that maintains references to the element stored at a position p and to the nodes associated with the children and parent of p. If p is the root of T, then the parent field of p is null. Likewise, if p does not have a left child (respectively, right child), the associated field is null.
+
+| Method             | Description                                                                                                                                                                                         |
+|--------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| addRoot(e):        | Creates a root for an empty tree, storing e as the element,and returns the position of that root; an error occurs if the tree is not empty.                                                         |
+| addLeft(p, e):     | Creates a left child of position p, storing element e, and returns the position of the new node; an error occurs if p already has a left child.                                                     |
+| addRight(p, e):    | Creates a right child of position p, storing element e, and returns the position of the new node; an error occurs if p already has a right child.                                                   |
+| set(p, e):         | Replaces the element stored at position p with element e,and returns the previously stored element.                                                                                                 |
+| attach(p, T1, T2): | Attaches the internal structure of trees T 1 and T 2 as the respective left and right subtrees of leaf position p and resets T1 and T2 to empty trees; an error condition occursif p is not a leaf. |
+| remove(p):         | Removes the node at position p, replacing it with its child(if any), and returns the element that had been stored at p; an error occurs if p has two children.                                      |
+
+
 
 
 
