@@ -19,16 +19,17 @@ Binary trees are an excellent data structure for storing entries of a map, assum
 The most important consequence of the structural property of a binary search tree is its namesake search algorithm. We can attempt to locate a particular key in a binary search tree by viewing it as a decision tree. In this case, the question asked at each internal position p is whether the desired key k is less than, equal to, or greater than the key stored at position p, which we denote as key(p). If the answer is "less than," then the search continues in the left subtree. If the answer is "equal," then the search terminates successfully. If the answer is "greater than," then the search continues in the right subtree. Finally, if we reach a leaf, then the search terminates unsuccessfully.
 
 ```JAVA
-public Value BinarySearh(Node n, Key k){
-		if(n.key == k){
-			
-			return n.value;
-		}else if(n.key.compareTo(k)>0){
-			BinarySearh(n.left, k);
-			
-		}else if(n.key.compareTo(k)<0){
-			BinarySearh(n.right, k);
-		}
-		return null;
-	}
+Algorithm TreeSearch(p, k):
+	if p is external then
+		return p //unsuccessful search
+	else if k == key(p) then
+		return p //successful search
+	else if k < key(p) then
+		return TreeSearch(left(p), k)
+	else //we know that k > key(p)
+		return TreeSearch(right(p), k)
 ```
+
+Since we spend O(1) time per position encountered in the search, the overall search runs in O(h) time, where h is the height of the binary search tree T. Admittedly, the height h of T can be as large as the number of entries, n, but we expect that it is usually much smaller. Later in this chapter we will show various strategies to maintain an upper bound of O(log n) on the height of a search tree T.
+
+## Insertion and Deletion
