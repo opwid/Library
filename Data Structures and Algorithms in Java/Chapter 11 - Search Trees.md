@@ -37,7 +37,7 @@ Since we spend O(1) time per position encountered in the search, the overall sea
 
 The map operation put(k, v) begins with a search for an entry with key k. If found, that entry's existing value is reassigned. Otherwise, the new entry can be inserted into the underlying tree by expanding the leaf that was reached at the end of the failed search into an internal node. The binary search-tree property is sustained by that placement (note that it is placed exactly where a search would expect it).
 
-```
+```JAVA
 Algorithm TreeInsert(k, v):
 	Input: A search key k to be associated with value v
 	p = TreeSearch(root( ), k)
