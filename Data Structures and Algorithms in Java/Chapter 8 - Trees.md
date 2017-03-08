@@ -110,11 +110,47 @@ Algorithm preorder(p):
 	for each child c in children(p) do
 		preorder(c)
 ```
+![Preorder](https://github.com/opwid/Library/blob/master/Data%20Structures%20and%20Algorithms%20in%20Java/Images/Preorder.png)
+
+## Postorder Traversal
+In some sense, this algorithm can be viewed as the opposite of the preorder traversal, because it recursively traverses the subtrees rooted at the children of the root first, and then visits the root (hence, the name "postorder").
+```
+Algorithm postorder(p):
+	for each child c in children(p) do
+		postorder(c)
+	perform the "visit" action for position p
+```
+![Postorder](https://github.com/opwid/Library/blob/master/Data%20Structures%20and%20Algorithms%20in%20Java/Images/Postorder.png)
+
+## Breadth-First Tree Traversal
+Although the preorder and postorder traversals are common ways of visiting the positions of a tree, another approach is to traverse a tree so that we visit all the positions at depth d before we visit the positions at depth d + 1. Such an algorithm is known as a breadth-first traversal.
+
+```
+Algorithm breadthfirst( ):
+	Initialize queue Q to contain root( )
+	while Q not empty do
+		p = Q.dequeue( )
+		perform the visit action for position p
+		for each child c in children(p) do
+			Q.enqueue(c)
+```
+
+![Breadth-First](https://github.com/opwid/Library/blob/master/Data%20Structures%20and%20Algorithms%20in%20Java/Images/Breadth-First.png)
+
+## Inorder Traversal
+During an inorder traversal, we visit a position between the recursive traversals of its left and right subtrees. The inorder traversal of a binary tree T can be informally viewed as visiting the nodes of T "from left to right." Indeed, for every position p, the inorder traversal visits p after all the positions in the left subtree of p and before all the positions in the right subtree of p.
+
+```
+Algorithm inorder(p):
+	if p has a left child lc then
+		inorder(lc)
+	perform the "visit" action for position p
+	if p has a right child rc then
+		inorder(rc)
+```
 
 
-
-
-
+![Inorder](https://github.com/opwid/Library/blob/master/Data%20Structures%20and%20Algorithms%20in%20Java/Images/Inorder.png)
 
 
 
