@@ -186,7 +186,7 @@ room_number varchar (7),
 time_slot_id varchar (4),
 primary key (course_id, sec_id, semester, year),
 check (semester in (’Fall’, ’Winter’, ’Spring’, ’Summer’)));
-```SQL
+```
 Here, we use the check clause to simulate an enumerated type, by specifying that semester must be one of 'Fall', 'Winter', 'Spring', or 'Summer'.
 
 ## Referential Integrity
