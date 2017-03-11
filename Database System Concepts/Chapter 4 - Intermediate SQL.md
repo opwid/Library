@@ -54,9 +54,46 @@ where course id is null;
 ```
 The __right outer join__ is symmetric to the left outer join. Tuples from the right-hand-side relation that do not match any tuple in the left-hand-side relation are padded with nulls and are added to the result of the right outer join.  
 
-The __full outer join__ is a combination of the left and right outer-join types.
+The __full outer join__ is a combination of the left and right outer-join types.  
 
+The __on__ clause can be used with outer joins. The following query is identical to the first query we saw using "student natural left outer join takes," except that the attribute ID appears twice in the result.
+```SQL
+select *
+from student left outer join takes on student.ID = takes.ID;
+```
+As we noted earlier, on and where behave differently for outer join. The reason for this is that outer join adds null-padded tuples only for those tuples that do not contribute to the result of the corresponding inner join. The on condition is part of the outer join specification, but a where clause is not.
+```SQL
+select * from instructor left outer join teaches on instructor.id = teaches.id and instructor.id = 101;
++-----+--------+----------------------+--------+------+-----------+----------+------+
+| id  | name   | dept_name            | salary | id   | course_id | semester | year |
++-----+--------+----------------------+--------+------+-----------+----------+------+
+|  99 | Jack   | Computer Engineering |   1150 | NULL |      NULL | NULL     | NULL |
+| 100 | Andy   | Computer Engineering |   1600 | NULL |      NULL | NULL     | NULL |
+| 101 | Wu     | E. Engineering       |   1800 |  101 |     10009 | Spring   | 2015 |
+| 101 | Wu     | E. Engineering       |   1800 |  101 |     10010 | Summer   | 2015 |
+| 101 | Wu     | E. Engineering       |   1800 |  101 |     10016 | Spring   | 2014 |
+| 101 | Wu     | E. Engineering       |   1800 |  101 |     10016 | Spring   | 2015 |
+| 102 | Brandt | E. Engineering       |   1800 | NULL |      NULL | NULL     | NULL |
+| 103 | Katz   | Psychology           |   1000 | NULL |      NULL | NULL     | NULL |
+| 104 | Gold   | Psychology           |   1100 | NULL |      NULL | NULL     | NULL |
+| 105 | Edward | History              |   1000 | NULL |      NULL | NULL     | NULL |
+| 106 | Lea    | Art                  |   1000 | NULL |      NULL | NULL     | NULL |
+| 107 | Taylor | Biology              |   1600 | NULL |      NULL | NULL     | NULL |
++-----+--------+----------------------+--------+------+-----------+----------+------+
 
+```
+```SQL
+select * from instructor left join teaches on instructor.id = teaches.id where  instructor.id = 101;
++-----+------+----------------+--------+------+-----------+----------+------+
+| id  | name | dept_name      | salary | id   | course_id | semester | year |
++-----+------+----------------+--------+------+-----------+----------+------+
+| 101 | Wu   | E. Engineering |   1800 |  101 |     10009 | Spring   | 2015 |
+| 101 | Wu   | E. Engineering |   1800 |  101 |     10010 | Summer   | 2015 |
+| 101 | Wu   | E. Engineering |   1800 |  101 |     10016 | Spring   | 2014 |
+| 101 | Wu   | E. Engineering |   1800 |  101 |     10016 | Spring   | 2015 |
++-----+------+----------------+--------+------+-----------+----------+------+
+
+```
 
 
 
