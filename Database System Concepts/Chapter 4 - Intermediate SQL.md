@@ -217,19 +217,71 @@ on <relation name or view name>
 to <user/role list>;
 ```
 
+The following grant statement grants database users Amit and Satoshi select authorization on the department relation:
+```SQL
+grant select on department to Amit, Satoshi;
+```
+This grant statement gives users Amit and Satoshi update authorization on the budget attribute of the department relation:
+```SQL
+grant update (budget) on department to Amit, Satoshi;
+```
+
+It is worth noting that the SQL authorization mechanism grants privileges on an entire relation, or on specified attributes of a relation. However, it does not permit authorizations on specific tuples of a relation.  
+
+To __revoke__ an authorization, we use the revoke statement. It takes a form almost identical to that of grant:
+```SQL
+revoke <privilege list>
+on <relation name or view name>
+from <user/role list>;
+```
+
+## Roles
+
+A set of roles is created in the database. Authorizations can be granted to roles, in exactly the same fashion as they are granted to individual users. Each database user is granted a set of roles (which may be empty) that she is authorized to perform.  
+
+Roles can be created in SQL as follows:
+```SQL
+create role instructor;
+```
+Roles can then be granted privileges just as the users can, as illustrated in this statement:
+```SQL
+grant select on takes to instructor;
+```
+Roles can be granted to users, as well as to other roles, as these statements show:
+```SQL
+grant dean to Amit;
+create role dean;
+grant instructor to dean;
+grant dean to Satoshi;
+```
+Note that there can be a chain of roles; for example, the role teaching assistant may be granted to all instructors. In turn the role instructor is granted to all deans. Thus, the dean role inherits all privileges granted to the roles instructor and to teaching assistant in addition to privileges granted directly to dean.
+
+## Authorization on Views
+
+A user who creates a view does not necessarily receive all privileges on that view. She receives only those privileges that provide no additional authorization beyond those that she already had. For example, a user who creates a view cannot be given __update__ authorization on a view without having __update__ authorization on the relations used to define the view. If a user creates a view on which no authorization can be granted, the system will deny the view creation request.
+
+## Transfer of Privileges
+
+A user who has been granted some form of authorization may be allowed to pass on this authorization to other users. By default, a user/role that is granted a privilege is not authorized to grant that privilege to another user/role. If we wish to grant a privilege and to allow the recipient to pass the privilege on to other users, we append the with grant option clause to the appropriate grant command. For example, if we wish to allow Amit the select privilege on department and allow Amit to grant this privilege to others, we write:
+```SQL
+grant select on department to Amit with grant option;
+```
 
 
+## Revoking of Privileges
+A pair of devious users might attempt to defeat the rules for revocation of authorization by granting authorization to each other. For example, if U2 is initially granted an authorization by the database administrator, and U2 further grants it to U3. Suppose U3 now grants the privilege back to U2. If the database administrator revokes authorization from U2, it might appear that U2 retains authorization through U3. However, note that once the administrator revokes authorization from U2, there is no path in the authorization graph from the root to either U2 or to U3. Thus, SQL ensures that the authorization is revoked from both the users.  
 
+As we just saw, revocation of a privilege from a user/role may cause other users/roles also to lose that privilege. This behavior is called cascading revocation. In most database systems, cascading is the default behavior. However, the revoke statement may specify __restrict__ in order to prevent cascading revocation:
+```SQL
+revoke select on department from Amit, Satoshi restrict;
+```
+In this case, the system returns an error if there are any cascading revocations, and does not carry out the revoke action. The keyword __cascade__ can be used instead of __restrict__ to indicate that revocation should cascade; however, it can be omitted, as we have done in the preceding examples, since it is the default behavior.  
 
-
-
-
-
-
-
-
-
-
+The following revoke statement revokes only the grant option, rather than the actual select privilege:
+```SQL
+revoke grant option for select on department from Amit;
+```
+Note that some database implementations do not support the above syntax; instead, the privilege itself can be revoked, and then granted again without the grant option.
 
 
 
