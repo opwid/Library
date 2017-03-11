@@ -1,1 +1,1 @@
-# The Relational Algebra
+Read Chapter 6 Slides
