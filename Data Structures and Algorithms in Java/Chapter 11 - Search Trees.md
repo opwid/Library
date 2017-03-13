@@ -126,6 +126,20 @@ The restructured subtree is rooted at the middle position denoted as b in the de
 
 By Proposition 11.1, the height of an AVL tree with n entries is guaranteed to be O(log n). Because the standard binary search-tree operation had running times bounded by the height, and because the additional work in maintaining balance factors and restructuring an AVL tree can be bounded by the length of a path in the tree, the traditional map operations run in worst-case logarithmic time with an AVL tree.
 
+# (2,4) Trees
+
+It is a particular example of a more general structure known as a multiway search tree, in which internal nodes may have more than two children. Linked data structure representation can be used for a multiway search tree. When using a general tree to implement a multiway search tree, we must store at each node one or more key-value pairs associated with that node. That is, we need to store with w a reference to some collection that stores the entries for w.  
+
+During a search for key k in a multiway search tree, the primary operation needed when navigating a node is finding the smallest key at that node that is greater than or equal to k. For this reason, it is natural to model the information at a node itself as a sorted map.  
+
+The primary efficiency goal for a multiway search tree is to keep the height as small as possible.  
+
+One form of a multiway search tree that keeps the tree balanced while using small secondary data structures at each node is the (2, 4) tree, also known as a 2-4 tree or 2-3-4 tree. This data structure achieves these goals by maintaining two simple properties:
+* Size Property: Every internal node has at most four children.
+* Depth Property: All the external nodes have the same depth.
+
+## (2,4)-Tree Operations
+
 
 
 
