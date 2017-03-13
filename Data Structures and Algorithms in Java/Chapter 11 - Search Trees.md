@@ -73,7 +73,17 @@ The primary operation to rebalance a binary search tree is known as a rotation. 
 
 To maintain the binary search-tree property through a rotation, we note that if position x was a left child of position y prior to a rotation (and therefore the key of x is less than the key of y), then y becomes the right child of x after the rotation, and vice versa. Furthermore, we must relink the subtree of entries with keys that lie between the keys of the two positions that are being rotated. For example, in Figure 11.8 the subtree labeled T2 represents entries with keys that are known to be greater than that of position x and less than that of position y. In the first configuration of that figure, T2 is the right subtree of position x; in the second configuration, it is the left subtree of position y. If used wisely, this operation can be performed to avoid highly unbalanced tree configurations.  
 
-One or more rotations can be combined to provide broader rebalancing within a tree. One such compound operation we consider is a trinode restructuring. For this manipulation, we consider a position x, its parent y, and its grandparent z. The goal is to restructure the subtree rooted at z in order to reduce the overall path length to x and its subtrees.  
+One or more rotations can be combined to provide broader rebalancing within a tree. One such compound operation we consider is a __trinode restructuring__. For this manipulation, we consider a position x, its parent y, and its grandparent z. The goal is to restructure the subtree rooted at z in order to reduce the overall path length to x and its subtrees.  
+
+```
+restructure(x):
+Input: A position x of a binary search tree T that has both a parent y and a grandparent z
+Output: Tree T after a trinode restructuring (which corresponds to a single or double rotation) involving positions x, y, and z
+1- Let (a, b, c) be a left-to-right (inorder) listing of the positions x, y, and z, and let (T1, T2, T3, T4) be a left-to-right (inorder) listing of the four subtrees of x, y, and z not rooted at x, y, or z.
+2- Replace the subtree rooted at z with a new subtree rooted at b.
+3- Let a be the left child of b and let T 1 and T 2 be the left and right subtrees of a, respectively.
+4- Let c be the right child of b and let T 3 and T 4 be the left and right subtrees of c, respectively.
+```
 
 In practice, the modification of a tree T caused by a trinode restructuring operation can be implemented through case analysis either as a single rotation or as a double rotation. In any of the cases, the trinode restructuring is completed with O(1) running time.
 
@@ -91,6 +101,8 @@ An immediate consequence of the height-balance property is that a subtree of an 
 __Proposition 11.1__: The height of an AVL tree storing n entries is O(log n).  
 
 By Proposition 11.1 and the analysis of binary search trees given in Section 11.1, the operation get, in a map implemented with an AVL tree, runs in time O(log n), where n is the number of entries in the map. Of course, we still have to show how to maintain the height-balance property after an insertion or deletion.
+
+## Insertion
 
 
 
