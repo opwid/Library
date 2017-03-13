@@ -104,6 +104,14 @@ By Proposition 11.1 and the analysis of binary search trees given in Section 11.
 
 ## Insertion
 
+Given a binary search tree T, we say that a position is balanced if the absolute value of the difference between the heights of its children is at most 1, and we say that it is unbalanced otherwise.
+
+An insertion of a new entry in a binary search tree results in a leaf position p being expanded to become internal, with two new external children. This action may violate the height-balance property (see, for example, Figure 11.11a), yet the only positions that may become unbalanced are ancestors of p, because those are the only positions whose subtrees have changed. Therefore, let us describe how to restructure T to fix any unbalance that may have occurred.  
+
+![11.11](https://github.com/opwid/Library/blob/master/Data%20Structures%20and%20Algorithms%20in%20Java/Images/11.11.png) 
+
+In particular, let z be the first position we encounter in going up from p toward the root of T such that z is unbalanced. Also, let y denote the child of z with greater height (and note that y must be an ancestor of p). Finally, let x be the child of y with greater height (there cannot be a tie and position x must also be an ancestor of p, possibly p itself ). We rebalance the subtree rooted at z by calling the trinode restructuring method, restructure(x).
+
 
 
 
