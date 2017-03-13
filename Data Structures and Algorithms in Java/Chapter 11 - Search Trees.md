@@ -55,4 +55,10 @@ To delete an entry with key k, we begin by calling TreeSearch(root(), k) to find
 
 As with searching and insertion, this algorithm for a deletion involves the traversal of a single path downward from the root, possibly moving an entry between two positions of this path, and removing a node from that path and promoting its child. Therefore, it executes in time O(h) where h is the height of the tree.
 
+## Performance of a Binary Search Tree
+
+Almost all operations have a worst-case running time that depends on h, where h is the height of the current tree. This is because most operations rely on traversing a path from the root of the tree, and the maximum path length within a tree is proportional to the height of the tree. Most notably, our implementations of map operations get, put, and remove, and most of the sorted map operations, each begins with a call to the treeSearch utility.  
+
+A binary search tree T is therefore an efficient implementation of a map with n entries only if its height is small. In the best case, T has height h = ⌈log(n+ 1)⌉− 1, which yields logarithmic-time performance for most of the map operations. In the worst case, however, T has height n, in which case it would look and feel like an ordered list implementation of a map. Such a worst-case configuration arises, for example, if we insert entries with keys in increasing or decreasing order.
+
 
