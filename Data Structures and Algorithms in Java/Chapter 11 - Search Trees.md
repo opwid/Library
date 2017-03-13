@@ -59,6 +59,24 @@ As with searching and insertion, this algorithm for a deletion involves the trav
 
 Almost all operations have a worst-case running time that depends on h, where h is the height of the current tree. This is because most operations rely on traversing a path from the root of the tree, and the maximum path length within a tree is proportional to the height of the tree. Most notably, our implementations of map operations get, put, and remove, and most of the sorted map operations, each begins with a call to the treeSearch utility.  
 
-A binary search tree T is therefore an efficient implementation of a map with n entries only if its height is small. In the best case, T has height h = ⌈log(n+ 1)⌉− 1, which yields logarithmic-time performance for most of the map operations. In the worst case, however, T has height n, in which case it would look and feel like an ordered list implementation of a map. Such a worst-case configuration arises, for example, if we insert entries with keys in increasing or decreasing order.
+A binary search tree T is therefore an efficient implementation of a map with n entries only if its height is small. In the best case, T has height h = ⌈log(n+ 1)⌉− 1, which yields logarithmic-time performance for most of the map operations. In the worst case, however, T has height n, in which case it would look and feel like an ordered list implementation of a map. Such a worst-case configuration arises, for example, if we insert entries with keys in increasing or decreasing order.  
+
+We can nevertheless take comfort that, on average, a binary search tree with n keys generated from a random series of insertions and removals of keys has expected height O(log n).  
+
+# Balanced Search Trees
+
+We will explore four search-tree algorithms that provide stronger performance guarantees than binary search tree in the worst-case. Three of the four data structures (AVL trees, splay trees, and red-black trees) are based on augmenting a standard binary search tree with occasional operations to reshape the tree and reduce its height.  
+
+The primary operation to rebalance a binary search tree is known as a rotation. During a rotation, we “rotate” a child to be above its parent.  
+
+![11.8](https://github.com/opwid/Library/blob/master/Data%20Structures%20and%20Algorithms%20in%20Java/Images/11.8.png)  
+
+To maintain the binary search-tree property through a rotation, we note that if position x was a left child of position y prior to a rotation (and therefore the key of x is less than the key of y), then y becomes the right child of x after the rotation, and vice versa. Furthermore, we must relink the subtree of entries with keys that lie between the keys of the two positions that are being rotated. For example, in Figure 11.8 the subtree labeled T2 represents entries with keys that are known to be greater than that of position x and less than that of position y. In the first configuration of that figure, T2 is the right subtree of position x; in the second configuration, it is the left subtree of position y. If used wisely, this operation can be performed to avoid highly unbalanced tree configurations.  
+
+One or more rotations can be combined to provide broader rebalancing within a tree. One such compound operation we consider is a trinode restructuring. For this manipulation, we consider a position x, its parent y, and its grandparent z. The goal is to restructure the subtree rooted at z in order to reduce the overall path length to x and its subtrees.  
+
+In practice, the modification of a tree T caused by a trinode restructuring operation can be implemented through case analysis either as a single rotation or as a double rotation. In any of the cases, the trinode restructuring is completed with O(1) running time.
+
+# AVL Trees
 
 
