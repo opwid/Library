@@ -78,5 +78,72 @@ One or more rotations can be combined to provide broader rebalancing within a tr
 In practice, the modification of a tree T caused by a trinode restructuring operation can be implemented through case analysis either as a single rotation or as a double rotation. In any of the cases, the trinode restructuring is completed with O(1) running time.
 
 # AVL Trees
+In this section, we describe a simple balancing strategy that guarantees worst-case logarithmic running time for all the fundamental map operations.  
+
+__Height-Balance Property__: For every internal position p of T, the heights of the children of p differ by at most 1.  
+
+Any binary search tree T that satisfies the height-balance property is said to be an __AVL tree__.  
+
+
+![11.10](https://github.com/opwid/Library/blob/master/Data%20Structures%20and%20Algorithms%20in%20Java/Images/11.10.png)  
+
+An immediate consequence of the height-balance property is that a subtree of an AVL tree is itself an AVL tree. The height-balance property also has the important consequence of keeping the height small, as shown in the following proposition.  
+__Proposition 11.1__: The height of an AVL tree storing n entries is O(log n).  
+
+By Proposition 11.1 and the analysis of binary search trees given in Section 11.1, the operation get, in a map implemented with an AVL tree, runs in time O(log n), where n is the number of entries in the map. Of course, we still have to show how to maintain the height-balance property after an insertion or deletion.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
