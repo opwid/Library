@@ -71,7 +71,11 @@ A heap (see Figure 9.1) is a binary tree T that stores entries at its positions,
 
 ![9.1](https://github.com/opwid/Library/blob/master/Data%20Structures%20and%20Algorithms%20in%20Java/Images/9.1.png) 
 
+As a consequence of the heap-order property, the keys encountered on a path from the root to a leaf of T are in nondecreasing order. Also, a minimal key is always stored at the root of T. This makes it easy to locate such an entry when min or removeMin is called, as it is informally said to be "at the top of the heap".  
 
+For the sake of efficiency, as will become clear later, we want the heap T to have as small a height as possible. We enforce this requirement by insisting that the heap T satisfy an additional structural property; it must be what we term complete:
+
+* __Complete Binary Tree Propert__: A heap T with height h is a complete binary tree if levels 0, 1, 2, ..., h-1 of T have the maximal number of nodes possible (namely, level i has 2<sup>i</sup> nodes, for 0 ≤ i ≤ h − 1) and the remaining nodes at level h reside in the leftmost possible positions at that level.
 
 
 
