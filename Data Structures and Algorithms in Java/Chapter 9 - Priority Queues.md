@@ -75,7 +75,12 @@ As a consequence of the heap-order property, the keys encountered on a path from
 
 For the sake of efficiency, as will become clear later, we want the heap T to have as small a height as possible. We enforce this requirement by insisting that the heap T satisfy an additional structural property; it must be what we term complete:
 
-* __Complete Binary Tree Propert__: A heap T with height h is a complete binary tree if levels 0, 1, 2, ..., h-1 of T have the maximal number of nodes possible (namely, level i has 2<sup>i</sup> nodes, for 0 ≤ i ≤ h − 1) and the remaining nodes at level h reside in the leftmost possible positions at that level.
+* __Complete Binary Tree Propert__: A heap T with height h is a complete binary tree if levels 0, 1, 2, ..., h-1 of T have the maximal number of nodes possible (namely, level i has 2<sup>i</sup> nodes, for 0 ≤ i ≤ h − 1) and the remaining nodes at level h reside in the leftmost possible positions at that level.  
+
+
+__The Height of a Heap__  
+
+A heap T storing n entries has height h = ⌊log n⌋ .
 
 
 
