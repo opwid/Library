@@ -78,9 +78,26 @@ For the sake of efficiency, as will become clear later, we want the heap T to ha
 * __Complete Binary Tree Propert__: A heap T with height h is a complete binary tree if levels 0, 1, 2, ..., h-1 of T have the maximal number of nodes possible (namely, level i has 2<sup>i</sup> nodes, for 0 ≤ i ≤ h − 1) and the remaining nodes at level h reside in the leftmost possible positions at that level.  
 
 
-__The Height of a Heap__  
+__The Height of a Heap__: A heap T storing n entries has height h = ⌊log n⌋.  
 
-A heap T storing n entries has height h = ⌊log n⌋ .
+## Implementing a Priority Queue with a Heap
+
+The Height of a Heap has an important consequence, for it implies that if we can perform update operations on a heap in time proportional to its height, then those operations will run in logarithmic time. Let us therefore turn to the problem of how to efficiently perform various priority queue methods using a heap.  
+
+### Adding an Entry to the Heap 
+
+Let us consider how to perform insert(k, v) on a priority queue implemented with a heap T. We store the pair (k, v) as an entry at a new node of the tree. To maintain the __complete binary tree property__, that new node should be placed at a position p just beyond the rightmost node at the bottom level of the tree, or as the leftmost position of a new level, if the bottom level is already full (or if the heap is empty).  
+
+#### Up-Heap Bubbling After an Insertion  
+
+After this action, the tree T is complete, but it may violate the __heap-order property__. Hence, unless position p is the root of T (that is, the priority queue was empty before the insertion), we compare the key at position p to that of p's parent, which we denote as q. If key k<sub>p</sub> ≥ k<sub>q</sub>, the heap-order property is satisfied and the algorithm terminates. If instead k<sub>p</sub> < k<sub>q</sub>, then we need to restore the heap-order property, which can be locally achieved by swapping the entries stored at positions p and q. This swap causes the new entry to move up one level. Again, the heap-order property may be violated, so we repeat the process, going up in T until no violation of the heap-order property occurs.  
+
+The upward movement of the newly inserted entry by means of swaps is conventionally called __up-heap bubbling__. A swap either resolves the violation of the heap-order property or propagates it one level up in the heap. In the worst case, up-heap bubbling causes the new entry to move all the way up to the root of heap T. Thus, in the worst case, the number of swaps performed in the execution of method insert is equal to the height of T.  
+
+### Removing the Entry with Minimal Key
+
+Let us now turn to method removeMin of the priority queue ADT. We know that an entry with the smallest key is stored at the root r of T (even if there is more than one entry with smallest key). However, in general we cannot simply delete node r, because this would leave two disconnected subtrees.
+
 
 
 
