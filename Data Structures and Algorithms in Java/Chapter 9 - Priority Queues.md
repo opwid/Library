@@ -59,7 +59,17 @@ public class StringLengthComparator implements Comparator<String> {
 
 
 
+# Heaps
+The two strategies for implementing a priority queue ADT in the previous section demonstrate an interesting trade-off. When using an unsorted list to store entries, we can perform insertions in O(1) time, but finding or removing an element with minimal key requires an O(n)-time loop through the entire collection. In contrast, if using a sorted list, we can trivially find or remove the minimal element in O(1) time, but adding a new element to the queue may require O(n) time to restore the sorted order.  
 
+In this section, we provide a more efficient realization of a priority queue using a data structure called a binary heap. This data structure allows us to perform both insertions and removals in logarithmic time, which is a significant improvement over the list-based implementations discussed in Priority Queues. The fundamental way the heap achieves this improvement is to use the structure of a binary tree to find a compromise between elements being entirely unsorted and perfectly sorted. 
+
+## The Heap Data Structure
+A heap (see Figure 9.1) is a binary tree T that stores entries at its positions, and that satisfies two additional properties: a relational property defined in terms of the way keys are stored in T and a structural property defined in terms of the shape of T itself. The relational property is the following: 
+
+* __Heap-Order Property__: In a heap T, for every position p other than the root, the key stored at p is greater than or equal to the key stored at p’s parent.
+
+![9.1](https://github.com/opwid/Library/blob/master/Data%20Structures%20and%20Algorithms%20in%20Java/Images/9.1.png) 
 
 
 
