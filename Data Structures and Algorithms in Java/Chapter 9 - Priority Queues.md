@@ -15,3 +15,12 @@ We model an element and its priority as a key-value composite known as an entry.
 
 The following table shows a series of operations and their effects on an initially empty priority queue.
 
+
+| Method      | Return Value | Contents                |
+|-------------|--------------|-------------------------|
+| insert(5,A) |              | { (5,A) }               |
+| insert(9,C) |              | { (5,A), (9,C) }        |
+| insert(3,B) |              | { (3,B), (5,A), (9,C) } |
+| min()       | (3,B)        | { (3,B), (5,A), (9,C) } |
+| removeMin() | (3,B)        | { (5,A), (9,C) }        |
+| insert(7,D) |              | { (5,A), (7,D), (9,C) } |
