@@ -81,8 +81,8 @@ Input: A position x of a binary search tree T that has both a parent y and a gra
 Output: Tree T after a trinode restructuring (which corresponds to a single or double rotation) involving positions x, y, and z
 1- Let (a, b, c) be a left-to-right (inorder) listing of the positions x, y, and z, and let (T1, T2, T3, T4) be a left-to-right (inorder) listing of the four subtrees of x, y, and z not rooted at x, y, or z.
 2- Replace the subtree rooted at z with a new subtree rooted at b.
-3- Let a be the left child of b and let T 1 and T 2 be the left and right subtrees of a, respectively.
-4- Let c be the right child of b and let T 3 and T 4 be the left and right subtrees of c, respectively.
+3- Let a be the left child of b and let T1 and T2 be the left and right subtrees of a, respectively.
+4- Let c be the right child of b and let T3 and T4 be the left and right subtrees of c, respectively.
 ```
 
 In practice, the modification of a tree T caused by a trinode restructuring operation can be implemented through case analysis either as a single rotation or as a double rotation. In any of the cases, the trinode restructuring is completed with O(1) running time.
