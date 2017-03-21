@@ -96,10 +96,33 @@ The upward movement of the newly inserted entry by means of swaps is conventiona
 
 ### Removing the Entry with Minimal Key
 
-Let us now turn to method removeMin of the priority queue ADT. We know that an entry with the smallest key is stored at the root r of T (even if there is more than one entry with smallest key). However, in general we cannot simply delete node r, because this would leave two disconnected subtrees.
+Let us now turn to method removeMin of the priority queue ADT. We know that an entry with the smallest key is stored at the root r of T (even if there is more than one entry with smallest key). However, in general we cannot simply delete node r, because this would leave two disconnected subtrees.  
 
+Instead, we ensure that the shape of the heap respects the complete binary tree property by deleting the leaf at the last position p of T, defined as the rightmost position at the bottommost level of the tree. To preserve the entry from the last position p, we copy it to the root r (in place of the entry with minimal key that is being removed by the operation).
 
+#### Down-Heap Bubbling After a Removal
+We are not yet done, however, for even though T is now complete, it likely violates the __heap-order property__. If T has only one node (the root), then the heap-order property is trivially satisfied and the algorithm terminates. Otherwise, we distinguish two cases, where p initially denotes the root of T:
 
+* If p has no right child, let c be the left child of p.
+* Otherwise (p has both children), let c be a child of p with minimal key.
+
+If key k<sub>p</sub> ≤ k<sub>c</sub>, the heap-order property is satisfied and the algorithm terminates. If instead k<sub>p</sub> > k<sub>c</sub>, then we need to restore the heap-order property. This can be locally achieved by swapping the entries stored at p and c. It is worth noting that when p has two children, we intentionally consider the smaller key of the two children.  
+
+Having restored the heap-order property for node p relative to its children, there may be a violation of this property at c; hence, we may have to continue swapping down T until no violation of the heap-order property occurs. This downward swapping process is called __down-heap bubbling__. A swap either resolves the violation of the heap-order property or propagates it one level down in the heap. In the worst case, an entry moves all the way down to the bottom level. Thus, the number of swaps performed in the execution of method removeMin is, in the worst case, equal to the height of heap T, that is, it is ⌊log n⌋.
+
+## Array-Based Implementation of a Complete Binary Tree
+
+The array-based representation of a binary tree (see Chapter 8) is especially suitable for a complete binary tree. We recall that in this implementation, the elements of the tree are stored in an array-based list A such that the element at position p is stored in A with index equal to the level number f(p) of p, defined as follows:
+
+* If p is the root, then f(p) = 0.
+* If p is the left child of position q, then f(p) = 2f(q) + 1.
+* If p is the right child of position q, then f(p) = 2f(q) + 2.
+
+For a tree with of size n, the elements have contiguous indices in the range [0, n-1] and the last position of is always at index n-1.  
+
+![9.4](https://github.com/opwid/Library/blob/master/Data%20Structures%20and%20Algorithms%20in%20Java/Images/9.4.png) 
+
+The array-based heap representation avoids some complexities of a linked tree structure. Specifically, methods insert and removeMin depend on locating the last position of a heap. With the array-based representation of a heap of size n, the last position is simply at index n-1. Locating the last position in a heap implemented with a linked tree structure requires more effort.
 
 
 
