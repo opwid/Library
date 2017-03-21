@@ -46,7 +46,15 @@ public class StringLengthComparator implements Comparator<String> {
 ```
 ***
 
+## Comparing Two List-Based Implementations
 
+| Method    | Unsorted List | Sorted List |
+|-----------|---------------|-------------|
+| size      | O(1)          | O(1)        |
+| isEmpty   | O(1)          | O(1)        |
+| insert    | O(1)          | O(n)        |
+| min       | O(n)          | O(1)        |
+| removeMin | O(n)          | O(1)        |
 
 
 
