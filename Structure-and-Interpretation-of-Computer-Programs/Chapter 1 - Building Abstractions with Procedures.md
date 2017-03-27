@@ -60,6 +60,7 @@ We have here a compound procedure, which has been given the name square.
 ```
 ## The Substitution Model for Procedure Application
 <h3>&nbsp;&nbsp;&nbsp;&nbsp;Normal-order evaluation vs Applicative-order evaluation</h3>
+
 ```Scheme
 Applicative-order evaluation (evaluate the arguments and then apply)
 
