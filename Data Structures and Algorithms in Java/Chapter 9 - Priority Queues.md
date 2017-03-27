@@ -122,10 +122,28 @@ For a tree with of size n, the elements have contiguous indices in the range [0,
 
 ![9.4](https://github.com/opwid/Library/blob/master/Data%20Structures%20and%20Algorithms%20in%20Java/Images/9.4.png) 
 
-The array-based heap representation avoids some complexities of a linked tree structure. Specifically, methods insert and removeMin depend on locating the last position of a heap. With the array-based representation of a heap of size n, the last position is simply at index n-1. Locating the last position in a heap implemented with a linked tree structure requires more effort.
+The array-based heap representation avoids some complexities of a linked tree structure. Specifically, methods insert and removeMin depend on locating the last position of a heap. With the array-based representation of a heap of size n, the last position is simply at index n-1. Locating the last position in a heap implemented with a linked tree structure requires more effort.  
+
+## Analysis of a Heap-Based Priority Queue
+
+The following table shows the running time of the priority queue ADT methods for the heap implementation of a priority queue, assuming that two keys can be compared in O(1) time and that the heap T is implemented with an array-based or linked-based tree representation.  
+
+In short, each of the priority queue ADT methods can be performed in O(1) or in O(log n) time, where n is the number of entries at the time the method is executed. The analysis of the running time of the methods is based on the following:  
+* The heap T has n nodes, each storing a reference to a key-value entry
+* The height of heap T is O(log n), since T is complete
+* The min operation runs in O(1) because the root of the tree contains such an element.
+* Locating the last position of a heap, as required for insert and removeMin, can be performed in O(1) time for an array-based representation, or O(log n) time for a linked-tree representation.
+* In the worst case, up-heap and down-heap bubbling perform a number of swaps equal to the height of T
+
+| Method       | Running Time |
+|--------------|--------------|
+| size,isEmpty | O(1)         |
+| min          | O(1)         |
+| insert       | O(logn)      |
+| removeMin    | O(logn)      |
 
 
-
+# Sorting with a Priority Queue
 
 
 
