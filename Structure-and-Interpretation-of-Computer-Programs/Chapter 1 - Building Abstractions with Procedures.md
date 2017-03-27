@@ -210,7 +210,8 @@ Observe that the problem of computing square roots breaks up naturally into a nu
 
 It is crucial that each procedure accomplishes an identifiable task that can be used as a module in defining other procedures.
 <h3>&nbsp;&nbsp;&nbsp;&nbsp;Local names</h3>
-One detail of a procedure's implementation that should not matter to the user of the procedure is the implementer's choice of names for the procedure's formal parameters. Thus, the following procedures should not be distinguishable: 
+One detail of a procedure's implementation that should not matter to the user of the procedure is the implementer's choice of names for the procedure's formal parameters. Thus, the following procedures should not be distinguishable:  
+
 ```Scheme
 (define (square x) (* x x))
 ```
