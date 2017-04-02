@@ -56,7 +56,9 @@ To implement a deletion, we cannot simply remove a found entry from its slot in 
 
 Another open addressing strategy, known as quadratic probing, iteratively tries the buckets A[(h(k) + f (i)) mod N], for i = 0,1,2,..., where f (i) = i<sup>2</sup>, until finding an empty bucket. As with linear probing, the quadratic probing strategy complicates the removal operation, but it does avoid the kinds of clustering patterns that occur with linear probing. Nevertheless, it creates its own kind of clustering, called secondary clustering, where the set of filled array cells still has a nonuniform pattern, even if we assume that the original hash codes are distributed uniformly.  
 
-An open addressing strategy that does not cause clustering of the kind produced by linear probing or the kind produced by quadratic probing is the double hashing strategy. In this approach, we choose a secondary hash function, h′, and if h maps some key k to a bucket A[h(k)] that is already occupied, then we iteratively try the buckets A[(h(k) + f (i)) mod N] next, for i = 1,2,3,..., where f (i) = i·h′ (k).
+An open addressing strategy that does not cause clustering of the kind produced by linear probing or the kind produced by quadratic probing is the double hashing strategy. In this approach, we choose a secondary hash function, h′, and if h maps some key k to a bucket A[h(k)] that is already occupied, then we iteratively try the buckets A[(h(k) + f (i)) mod N] next, for i = 1,2,3,..., where f (i) = i·h′(k).  
+
+![10.2](https://github.com/opwid/Library/blob/master/Data%20Structures%20and%20Algorithms%20in%20Java/Images/10.2.png)  
 
 
 
