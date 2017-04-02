@@ -60,7 +60,16 @@ An open addressing strategy that does not cause clustering of the kind produced 
 
 ![10.2](https://github.com/opwid/Library/blob/master/Data%20Structures%20and%20Algorithms%20in%20Java/Images/10.2.png)  
 
+# Sorted Maps
+The traditional map ADT allows a user to look up the value associated with a given key, but the search for that key is a form known as an exact search. In this section, we will introduce an extension known as the sorted map ADT. 
 
+## Sorted Search Tables
+
+Several data structures can efficiently support the sorted map ADT, and we will examine some advanced techniques. In this section, we will begin by exploring a simple implementation of a sorted map. We store the map's entries in an array list A so that they are in increasing order of their keys. We refer to this implementation as a sorted search table.  
+
+As was the case with the unsorted table map of Section 10.1.4, the sorted search table has a space requirement that is O(n). The primary advantage of this representation, and our reason for insisting that A be array-based, is that it allows us to use the binary search algorithm for a variety of efficient operations.  
+
+It should be clear that the size, firstEntry, and lastEntry methods run in O(1) time, and that iterating the keys of the table in either direction can be performed in O(n) time. The analysis for the various forms of search all depend on the fact that a binary search on a table with n entries runs in O(log n) time.
 
 
 
