@@ -145,7 +145,20 @@ In short, each of the priority queue ADT methods can be performed in O(1) or in 
 
 # Sorting with a Priority Queue
 
+* In the first phase, we insert the elements of S as keys into an initially empty priority queue P by means of a series of n insert operations, one for each element.
+* In the second phase, we extract the elements from P in nondecreasing order by means of a series of n removeMin operations, putting them back into S in that order.
 
+## Selection Sort
+In Phase 1 of the pqSort scheme, we insert all elements into a priority queue P; in Phase 2 we repeatedly remove the minimal element from P using the removeMin method. If we implement P with an unsorted list, then Phase 1 of pqSort takes O(n) time, for we can insert each element in O(1) time. In Phase 2, the running time of each removeMin operation is proportional to the size of P. Thus, the bottleneck computation is the repeated "selection" of the minimum element in Phase 2. For this reason, this algorithm is better known as selection-sort. Phase 2 takes time O(n<sup>2</sup>), as does the entire selection-sort algorithm.
+
+## Insertion Sort
+
+If we implement the priority queue P using a sorted list, then the running time of Phase 2 improves to O(n), for each operation removeMin on P now takes O(1) time. Unfortunately, Phase 1 now becomes the bottleneck for the running time, since, in the worst case, each insert operation takes time proportional to the size of P. This sorting algorithm is therefore better known as insertion-sort, for the bottleneck in this sorting algorithm involves the repeated "insertion" of a new element at the appropriate position in a sorted list. Phase 1 runs in O(n<sup>2</sup>) time, and hence, so does the entire insertion-sort algorithm.
+
+## Heap Sort
+The heap-sort algorithm sorts a sequence S of n elements in O(nlogn) time, assuming two elements of S can be compared in O(1) time. In general, we say that a sorting algorithm is in-place if it uses only a small amount of memory in addition to the sequence storing the objects to be sorted. The variation of heap-sort below qualifies as in-place; instead of transferring elements out of the sequence and then back in, we simply rearrange them.  
+
+![9.9](https://github.com/opwid/Library/blob/master/Data%20Structures%20and%20Algorithms%20in%20Java/Images/9.9.png) 
 
 
 
