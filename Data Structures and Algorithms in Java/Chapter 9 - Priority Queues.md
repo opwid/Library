@@ -160,6 +160,8 @@ The heap-sort algorithm sorts a sequence S of n elements in O(nlogn) time, assum
 
 ![9.9](https://github.com/opwid/Library/blob/master/Data%20Structures%20and%20Algorithms%20in%20Java/Images/9.9.png) 
 
+https://www.youtube.com/watch?v=MtQL_ll5KhQ
+
 
 
 
