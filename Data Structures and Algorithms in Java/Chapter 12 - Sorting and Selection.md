@@ -11,3 +11,9 @@ To sort a sequence S with n elements using the three divide-and-conquer steps, t
 * Divide: If S has zero or one element, return S immediately; it is already sorted. Otherwise (S has at least two elements), remove all the elements from S and put them into two sequences, S<sub>1</sub> and S<sub>2</sub>, each containing about half of the elements of S; that is, S<sub>1</sub> contains the first ⌊n/2⌋ elements of S, and S<sub>2</sub> contains the remaining ⌈n/2⌉ elements.
 * Conquer: Recursively sort sequences S<sub>1</sub> and S<sub>2</sub>.
 * Combine: Put the elements back into S by merging the sorted sequences S<sub>1</sub> and S<sub>2</sub> into a sorted sequence.
+
+The merge-sort tree associated with an execution of merge-sort on a sequence of size n has height ⌈log n⌉.
+
+![Merge-sort-example-300px](https://upload.wikimedia.org/wikipedia/commons/c/cc/Merge-sort-example-300px.gif) 
+
+https://upload.wikimedia.org/wikipedia/commons/c/cc/Merge-sort-example-300px.gif
