@@ -31,3 +31,7 @@ Linux provides the resource limit (rlimit) mechanism to impose certain system re
 * rlim_cur is the current resource limit for the process. It is also referred to as the soft limit.
 * rlim_max is the maximum allowed value for the limit. It is therefore also referred to as the hard limit.
 
+The setrlimit system call is used to increase or decrease the current limit. However, the value specified in rlim_max may not be exceeded. getrlimits is used to check the current limit.  
+
+_cat /proc/self/limits__
+
