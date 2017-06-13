@@ -21,7 +21,10 @@ If a process wants to access system data or functions (the latter manage the res
 One option known as kernel preemption was added to the kernel during the development of kernel 2.5. This option supports switches to another process, if this is urgently required, even during the execution of system calls in kernel mode (but not during interrupts). Although the kernel attempts to execute system calls as quickly as possible, the time needed may be too long for some applications that are reliant on constant data streams. Kernel preemption can reduce such wait times and thus ensure "smoother" program execution. However, this is at the expense of increased kernel complexity because many data structures then need to be protected against concurrent access even on single-processor systems. This technique is discussed in Section 2.8.3.
 
 # Process Representation
-All algorithms of the Linux kernel concerned with processes and programs are built around a data structure named task_struct and defined in include/sched.h.  
+All algorithms of the Linux kernel concerned with processes and programs are built around a data structure named task_struct and defined in include/sched.h.
+
+http://lxr.linux.no/#linux+v4.10.1/include/linux/sched.h
+
 
 Linux provides the resource limit (rlimit) mechanism to impose certain system resource usage limits on processes. The mechanism makes use of the rlim array in task_struct , whose elements are of the struct rlimit type.  
 
