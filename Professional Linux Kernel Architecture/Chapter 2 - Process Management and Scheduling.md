@@ -33,5 +33,5 @@ Linux provides the resource limit (rlimit) mechanism to impose certain system re
 
 The setrlimit system call is used to increase or decrease the current limit. However, the value specified in rlim_max may not be exceeded. getrlimits is used to check the current limit.  
 
-_cat /proc/self/limits__
+_cat /proc/self/limits_
 
