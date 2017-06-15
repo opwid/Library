@@ -35,3 +35,23 @@ The setrlimit system call is used to increase or decrease the current limit. How
 
 _cat /proc/self/limits_
 
+## Process Types
+
+fork generates an identical copy of the current process; this copy is known as a child process. All resources of the original process are copied in a suitable way so that after the system call there are two independent instances of the original process. These instances are not linked in any way but have, for example, the same set of open files, the same working directory, the same data in memory (each with its own copy of the data), and so on.  
+
+exec replaces a running process with another application loaded from an executable binary file. In other words, a new program is loaded. Because exec does not create a new process, an old program must first be duplicated using fork, and then exec must be called to generate an additional application on the system.  
+
+Linux also provides the clone system call in addition to the two calls above that are available in all Unix flavors and date back to very early days. In principle, clone works in the same way as fork , but the new process is not independent of its parent process and can share some resources with it. It is possible to specify which resources are to be shared and which are to be copied — for example, data in memory, open files, or the installed signal handlers of the parent process. clone is used to implement threads. However, the system call alone is not enough to do this. Libraries are also needed in userspace to complete implementation. Examples of such libraries are Linuxthreads and Next Generation Posix Threads.
+
+## Namespaces
+Namespaces provide a lightweight form of virtualization by allowing us to view the global properties of a running system under different aspects.  
+
+Notice that support for namespaces in a simple form has been available in Linux for quite a long time in the form of the chroot system call. This method allows for restricting processes to a certain part of the filesystem and is thus a simple namespace mechanism. True namespaces do, however, allow for controlling much more than just the view on the filesystem.  
+
+New namespaces can be established in two ways:  
+* When a new process is created with the fork or clone system call, specific options control if namespaces will be shared with the parent process, or if new namespaces are created.
+* The unshare system call dissociates parts of a process from the parent, and this also includes namespaces. See the manual page unshare(2) for more information.  
+
+Once a process has been disconnected from the parent namespace using any of the two mechanisms above, changing a — from its point of view — global property will not propagate into the parent namespace, and neither will a change on the parent side propagate into the child, at least for simple quantities.
+
+
